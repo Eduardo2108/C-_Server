@@ -1,0 +1,14 @@
+//
+// Created by eduardo218 on 4/5/21.
+//
+
+#ifndef C__SERVER_COLLECTOR_H
+#define C__SERVER_COLLECTOR_H
+
+
+class Collector {
+
+};
+
+
+#endif //C__SERVER_COLLECTOR_H
