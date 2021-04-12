@@ -6,14 +6,11 @@
 #define C__SERVER_INTEGER_H
 
 #include "../Constants.h"
-
+#include "GenericType.h"
 class Integer : public GenericType {
 public:
-    Integer() {
-
-    }
-
     Integer(string key, const char *value) {
+
         this->size = INT_SIZE;
         this->referenceCount = 0;
         this->addr = nullptr;
@@ -21,7 +18,6 @@ public:
         this->value = value;
 
     }
-
 };
 
 #endif //C__SERVER_INTEGER_H

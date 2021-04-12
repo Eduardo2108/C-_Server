@@ -6,6 +6,8 @@
 #define C__SERVER_GENERICTYPE_H
 
 
+#include <ostream>
+
 using namespace std;
 
 
@@ -17,6 +19,13 @@ protected:
     /**Address of where the variable its stored in the server, we get it from the server itself as a response
      * of the method "create"*/
     const char *addr;
+public:
+    friend ostream &operator<<(ostream &os, const GenericType &type) {
+        os << "key: " << type.key << " value: " << type.value;
+        return os;
+    }
+
+protected:
 
     /** Name of the variable, used for identifying the variable among the others, its an unique value
      * and it cannot be any of the reserved words of C!.
@@ -44,6 +53,14 @@ public:
 
     void setKey(const string &key) {
         GenericType::key = key;
+    }
+
+    bool operator==(const GenericType &rhs) const {
+        return key == rhs.key;
+    }
+
+    bool operator!=(const GenericType &rhs) const {
+        return !(rhs == *this);
     }
 
     void setValue(const char *value) {

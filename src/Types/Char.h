@@ -4,6 +4,7 @@
 
 #ifndef C__SERVER_CHAR_H
 #define C__SERVER_CHAR_H
+#include "GenericType.h"
 class Char : public GenericType {
 public:
     Char( string key, const char *value) {
