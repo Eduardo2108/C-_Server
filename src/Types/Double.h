@@ -4,6 +4,7 @@
 
 #ifndef C__SERVER_DOUBLE_H
 #define C__SERVER_DOUBLE_H
+
 class Double : public GenericType {
 public:
     Double(string key, const char *value) {
@@ -15,4 +16,5 @@ public:
 
     }
 };
+
 #endif //C__SERVER_DOUBLE_H

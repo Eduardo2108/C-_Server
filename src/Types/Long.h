@@ -5,7 +5,7 @@
 #ifndef C__SERVER_LONG_H
 #define C__SERVER_LONG_H
 
-class Long : public GenericType {
+class Long : public GenericType{
 public:
     Long(string key, const char *value) {
         this->addr = nullptr;

@@ -4,7 +4,9 @@
 
 #ifndef C__SERVER_FLOAT_H
 #define C__SERVER_FLOAT_H
-#include ""
+
+
+
 class Float : public GenericType {
 public:
     Float(string key, const char *value) {

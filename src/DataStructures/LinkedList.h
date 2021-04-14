@@ -4,11 +4,20 @@
 
 #ifndef C__SERVER_LINKEDLIST_H
 #define C__SERVER_LINKEDLIST_H
+
+#include <ostream>
+
 using namespace std;
 
 template<typename T>
 class Node {
+public:
+    friend ostream &operator<<(ostream &os, const Node &node) {
+        os << "value: " << node.value;
+        return os;
+    }
 
+private:
     T value; /*!< Value stored in the node.*/
 public:
     Node(T value) : value(value) {}
@@ -153,16 +162,16 @@ public:
         return result;
     }
 
-    void delIndex(int index) {
-
-    }
-
     /**>
      * Method for deleting the first element of the list.
      * @tparam T Generic data type, must have equal operator.
      */
     void delHead() {
         this->del(this->head->getValue());
+    }
+
+    void delTail() {
+        del(this->get(this->len - 1));
     }
 
     int getLen() {

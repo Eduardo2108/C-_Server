@@ -7,7 +7,8 @@
 
 #include "../Constants.h"
 #include "GenericType.h"
-class Integer : public GenericType {
+
+class Integer : public GenericType{
 public:
     Integer(string key, const char *value) {
 

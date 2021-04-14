@@ -10,10 +10,10 @@
 template<typename T>
 class Queue {
 private:
-    LinkedList<T> list = new LinkedList<T>();
+    LinkedList<T> *list = new LinkedList<T>();
 public:
     bool isEmpty() {
-        return this->list.getLen() == 0;
+        return this->list->getLen() == 0;
     }
 
     void queue(T element) {
@@ -21,11 +21,11 @@ public:
     }
 
     T peek() {
-        return this->list.getHead()->getValue();
+        return this->list->getHead()->getValue();
     }
 
     void deQueue() {
-        this->list.delHead();
+        this->list->delHead();
     }
 };
 

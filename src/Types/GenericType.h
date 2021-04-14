@@ -19,6 +19,20 @@ protected:
     /**Address of where the variable its stored in the server, we get it from the server itself as a response
      * of the method "create"*/
     const char *addr;
+    int offset;
+public:
+    int getOffset() const {
+        return offset;
+    }
+
+    void setOffset(int offset) {
+        GenericType::offset = offset;
+    }
+
+    int getReferenceCount() const {
+        return referenceCount;
+    }
+
 public:
     friend ostream &operator<<(ostream &os, const GenericType &type) {
         os << "key: " << type.key << " value: " << type.value;
@@ -39,6 +53,7 @@ protected:
     int referenceCount;
 
 public:
+
     int getSize() const {
         return size;
     }
