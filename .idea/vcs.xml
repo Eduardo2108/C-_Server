@@ -2,5 +2,12 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cpp-netlib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cpp-netlib/deps/asio" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cpp-netlib/deps/cxxopts" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cpp-netlib/deps/googlemock" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cpp-netlib/deps/googletest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cpp-netlib/deps/uri" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cpp-netlib/libs/network/doc/_ext/breathe" vcs="Git" />
   </component>
 </project>

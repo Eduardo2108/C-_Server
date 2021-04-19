@@ -6,6 +6,8 @@
 #define C__SERVER_FLOAT_H
 
 
+#include "GenericType.h"
+#include "../Constants.h"
 
 class Float : public GenericType {
 public:

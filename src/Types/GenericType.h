@@ -7,6 +7,8 @@
 
 
 #include <ostream>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -106,7 +108,7 @@ public:
 public:
 
     void show() {
-        cout << "{ Name: " << this->key << " Value: " << this->value << " Address: " << this->addr << "}\n";
+        cout << "{ Name: " << this->key << " Value: " << this->value << " Offset: " << this->offset << "}\n";
     }
 };
 

@@ -6,7 +6,7 @@
 #define C__SERVER_LINKEDLIST_H
 
 #include <ostream>
-
+#include <string>
 using namespace std;
 
 template<typename T>

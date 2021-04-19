@@ -42,7 +42,7 @@ public:
 
         //CREATE WRITER
         StringBuffer s;
-        Writer<StringBuffer> writer(s);
+        Writer <StringBuffer> writer(s);
         writer.StartObject();
 
         //FILL THE SPACES IN THE JSON FILE
@@ -75,7 +75,7 @@ public:
 
         //CREATE WRITER
         StringBuffer s;
-        Writer<StringBuffer> writer(s);
+        Writer <StringBuffer> writer(s);
         writer.StartObject();
 
         //IF THE REFERENCE HAS A POINTER TO A VALUE

@@ -2,17 +2,17 @@
 // Created by eduardo218 on 4/5/21.
 //
 
-#ifndef C__SERVER_MEMORYMANAGER_H
-#define C__SERVER_MEMORYMANAGER_H
+#ifndef C__SERVER_MEMORYMANAGEMENT_H
+#define C__SERVER_MEMORYMANAGEMENT_H
 
-#include "../DataStructures/Queue.h"
-#include "../Types/GenericType.h"
-#include "../Util/Converter.h"
+#include "DataStructures/Queue.h"
+#include "Types/GenericType.h"
+#include "Util/Converter.h"
 
-class MemoryManager {
+class MemoryManagement {
 
 private:
-    static MemoryManager *instance;
+    static MemoryManagement *instance;
 
     /** Actual offset of the memory block, its the last position available, used for adding new objects when theres no offsets for recycling.*/
     int offset;
@@ -37,26 +37,26 @@ private:
             T *temp = (T *) baseDir;
             *(temp + offset) = element;
             address = offset;
-            cout << "El elemento: " << element << " fué guardado en la posición: " << offset << endl;
+            cout << "El elemento: " << element << " fué guardado en la posición: " << offset <<
+                 " con un tamaño de: " << sizeof(*(temp + offset)) <<
+                 " bytes" << ", en una dirección de memoria de: "
+                 << sizeof((temp + offset)) <<
+                 " bytes" << endl;
             offset++;
-        }
-            //caso en que se  recicla.
-        else {
-            //obtengo el número en el que tengo que agregar el elemento :)
+        } else {
+            availableAddresses->show();
             int position = availableAddresses->peek();
-            //Cambio el valor usando arithmetic de punteros  :)
             T *temp = (T *) baseDir;
             *(temp + position) = element;
             address = position;
             cout << "El elemento: " << element << " fué guardado en la posición (reutilizada): " << position << endl;
-            //saco el número de la lista de reciclaje :)
             availableAddresses->deQueue();
         }
         return address;
     }
 
 public:
-    MemoryManager(int size) {
+    MemoryManagement(int size) {
         //create malloc of the custom size.
         this->baseDir = malloc(size);
         //Initialize variables
@@ -84,19 +84,26 @@ public:
     }
 
     void show() {
-        cout << "-------Memory Map---------\n";
+        /*cout << "-------Memory Map---------\n";
         for (int i = 0; i < this->map->getLen(); ++i) {
             GenericType *obj = map->get(i);
             cout << "Name: " << obj->getKey()
                  << " | Offset: " << obj->getOffset()
                  << " | Value: " << obj->getValue()
                  << "\n-------------------" << endl;
+        }*/
+        cout << "-------Memory Block---------\n";
+        for (int i = 1; i < offset; ++i) {
+            cout << "Position: " << i << " | Value (Int): " << this->get<int>(i)
+                 << " | Value (Float): " << this->get<float>(i)
+                 << " | Value (Double): " << this->get<double>(i)
+                 << " | Value (Long): " << this->get<long>(i)
+                 << " | Value (Char): " << this->get<char>(i) << endl
+                 << "\n-------------------" << endl;
         }
     }
 
 public:
-
-
     /**
      * Method for getting an element from the memory map.
      * @param key name of the variable, this value doesnt repeat, and its used as unique search key
@@ -119,13 +126,13 @@ public:
      * @return memory address of the object, in string format.
      */
     string getAddr(const string &key) {
-        this->getElement(key)->getAddr();
+        return this->getElement(key)->getAddr();
     }
 
     template<typename T>
     void addElementDigits(GenericType *obj) {
         auto *conv = new Converter();
-        int dir = this->addElement<T>(conv->template convertDigits<T>(obj->getValue()));
+        int dir = this->addElement<T>(conv->convertDigits<T>(obj->getValue()));
         //le asigno a el objeto el valor, para poder accesarlo luego.
         obj->setOffset(dir);
         //agrego el objeto en el mapa de memoruia
@@ -133,13 +140,25 @@ public:
     }
 
     void addElementChar(GenericType *obj) {
-        int dir = this->addElement<const char *>(obj->getValue());
+        int dir = this->addElement<char>(*obj->getValue());
         //le asigno a el objeto el valor, para poder accesarlo luego.
         obj->setOffset(dir);
         //agrego el objeto en el mapa de memoruia
         this->map->append(obj);
     }
+
+    void deleteElement(string key) {
+        GenericType *obj = this->getElement(key);
+        long *temp = (long *) this->baseDir;
+
+        long *ptr = temp + obj->getOffset();
+        //free(ptr);
+
+        this->map->del(obj);
+        this->availableAddresses->queue(obj->getOffset());
+        this->map->del(obj);
+    }
 };
 
 
-#endif //C__SERVER_MEMORYMANAGER_H
+#endif //C__SERVER_MEMORYMANAGEMENT_H
