@@ -7,9 +7,9 @@
 
 #include "string"
 #include <ostream>
-#include "../Util/Json.h"
- using namespace std;
-using namespace rapidjson;
+#include "Message.h"
+
+using namespace std;
 
 class Message {
 private:
@@ -51,7 +51,7 @@ public:
     }
 
     void show() {
-        cout << "---- Message generated ----\n\n" <<
+        cout << "\n---- Message generated ----\n\n" <<
              "action: " << action <<
              "\n\n****CREATE****\n\n" <<
              "\ncontentJson: " << contentJson <<
@@ -116,29 +116,6 @@ private:
     /**Operation to make between the variables */
     string operation;
 
-
-public:
-    /**
-     * Method for creating the json formatted object of an Primitive data type.
-     * @param name key name of the variable.
-     * @param value value in string of the variable.
-     */
-    void fillJson(string name, string value) {
-        //CREATE WRITER
-        rapidjson::StringBuffer s;
-        rapidjson::Writer <rapidjson::StringBuffer> writer(s);
-        writer.StartObject();
-
-        //FILL THE SPACES IN THE JSON FILE
-        writer.Key(KEY_VALUE); //string name of the variable
-        writer.String(name.c_str());
-
-        writer.Key(VALUE_KEY); //string name of the variable
-        writer.String(value.c_str());
-        writer.EndObject();
-
-        contentJson = s.GetString();
-    }
 };
 
 

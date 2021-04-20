@@ -5,17 +5,21 @@
 #ifndef C__SERVER_JSON_H
 #define C__SERVER_JSON_H
 
+
 #include "../../librerias/rapidjson/stringbuffer.h"
 #include "../../librerias/rapidjson/writer.h"
-#include "../../librerias/rapidjson/document.h"
+
 #include <sstream>
 #include "iostream"
 #include "../Types/GenericType.h"
-#include "../Types/Integer.h"
 #include "../Types/Reference.h"
+#include "../../librerias/rapidjson/document.h"
+#include "../Constants.h"
+#include "Coms/Message.h"
 
 using namespace rapidjson;
 using namespace std;
+
 
 class Json {
     //TODO: hacer singleton
@@ -112,17 +116,17 @@ public:
         return s.GetString();
 
     }
-/*
 
     static string generateJson(Message *msg) {
         //CREATE WRITER
         StringBuffer s;
+
         Writer<StringBuffer> writer(s);
         writer.StartObject();
-        */
-/*  "CREATE" - FOR CREATING AN INSTANCE\n
+
+        /**  "CREATE" - FOR CREATING AN INSTANCE\n
         *  "MODIFY" - FOR MODIFYING AN EXISTING INSTANCE\n
-        *  "SEARCH" - FOR SEARCHING AN INSTANCE*//*
+        *  "SEARCH" - FOR SEARCHING AN INSTANCE*/
 
         //FILL THE SPACES IN THE JSON FILE
         if (msg->getAction() == CREATE) {
@@ -165,7 +169,6 @@ public:
         return s.GetString();
 
     }
-*/
 
     static void readJson(const string &json, GenericType *obj) {
 
@@ -195,11 +198,7 @@ public:
         rapidjson::Document doc;
         doc.Parse<kParseDefaultFlags>(json.c_str());
 
-        if (doc.HasMember(KEY_VALUE)) {
-            const char *keyName = doc[KEY_VALUE].GetString();
-            obj->setKey(keyName);
 
-        }
         if (doc.HasMember(ADDRESS_VALUE)) {
             const char *addr = (doc[ADDRESS_VALUE].GetString());
             obj->setAddr(addr);
@@ -210,6 +209,41 @@ public:
         }
         return *obj;
     }
+
+    static Message *readJsonMessage(const string &json) {
+        Message *msg = new Message();
+        rapidjson::Document doc;
+        doc.Parse<kParseDefaultFlags>(json.c_str());
+        if (doc.HasMember(ACTION_KEY)) {
+            const char *action = doc[ACTION_KEY].GetString();
+            msg->setAction(action);
+        }
+        if (doc.HasMember(CONTENT_KEY)) {
+            msg->setContentJson(doc[CONTENT_KEY].GetString());
+        }
+        if (doc.HasMember(SIZE_KEY)) {
+            msg->setSize(doc[SIZE_KEY].GetInt());
+        }
+        if (doc.HasMember(TYPE_KEY)) {
+            msg->setType(doc[TYPE_KEY].GetString());
+        }
+
+        if (doc.HasMember(FIRST_VAR_KEY)) {
+            msg->setFirstVariable(doc[FIRST_VAR_KEY].GetString());
+        }
+
+        if (doc.HasMember(FIRST_VAR_KEY)) {
+            msg->setFirstVariable(doc[FIRST_VAR_KEY].GetString());
+        }
+        if (doc.HasMember(SECOND_VAR_KEY)) {
+            msg->setSecondVariable(doc[SECOND_VAR_KEY].GetString());
+        }
+        if (doc.HasMember(OPERATION_KEY)) {
+            msg->setOperation(doc[OPERATION_KEY].GetString());
+        }
+        return msg;
+    }
+
 
 };
 

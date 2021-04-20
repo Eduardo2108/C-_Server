@@ -26,6 +26,16 @@ static const char *const ADDRESS_VALUE = "addr";
 static const char *const VALUE_KEY = "value";
 static const char *const POINTER_VALUE = "pointer";
 
+//For messages
+static const char *const ACTION_KEY = "action";
+static const char *const CONTENT_KEY = "contentJson";
+static const char *const TYPE_KEY = "type";
+static const char *const SIZE_KEY = "size";
+static const char *const FIRST_VAR_KEY = "firstVariable";
+static const char *const SECOND_VAR_KEY = "secondVariable";
+static const char *const OPERATION_KEY= "operation";
+
+
 //|---------------------------| //
 //|   * MESSAGE CONSTANTS  *  | //
 //|---------------------------| //

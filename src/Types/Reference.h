@@ -52,5 +52,5 @@ public:
     string getKey() {
         return this->key;
     }
-}
+};
 #endif //C__SERVER_REFERENCE_H
