@@ -5,6 +5,8 @@
 #include "src/Util/Coms/Message.h"
 #include <thread>
 #include "src/Util/Json.h"
+#include "src/ServerManager.h"
+
 
 using namespace std;
 
@@ -21,8 +23,11 @@ int main() {
     RunS.join();
 */
     string message = "{\"action\":\"CREATE\",\"contentJson\":\"{\\\"key\\\":\\\"x\\\",\\\"value\\\":\\\"2\\\"}\",\"type\":\"Integer\",\"size\":4}";
-    cout << message << endl;
+
     auto *msg = new Message();
-    Json::readJsonMessage(message)->show();
+    msg = Json::readJsonMessage(message);
+    ServerManager *sm = new ServerManager();
+    Response *r = sm->processRequest(msg);
+    r->show();
     return 0;
 }

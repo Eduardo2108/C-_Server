@@ -10,6 +10,10 @@
 
 class Integer : public GenericType{
 public:
+    Integer() {
+
+    }
+
     Integer(string key, const char *value) {
 
         this->size = INT_SIZE;

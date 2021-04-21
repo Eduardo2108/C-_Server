@@ -7,6 +7,10 @@
 
 class Long : public GenericType{
 public:
+    Long() {
+
+    }
+
     Long(string key, const char *value) {
         this->addr = nullptr;
         this->value = value;

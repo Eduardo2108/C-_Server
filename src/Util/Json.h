@@ -16,6 +16,8 @@
 #include "../../librerias/rapidjson/document.h"
 #include "../Constants.h"
 #include "Coms/Message.h"
+#include "Coms/Response.h"
+
 
 using namespace rapidjson;
 using namespace std;
@@ -69,6 +71,28 @@ public:
 
     }
 
+    static string generateJson(Response *obj) {
+        //GET THE VALUES FROM THE OBJECT
+        const char *msg = obj->getMessage().c_str();
+        int code = obj->getStatusCode();
+
+        //CREATE WRITER
+        StringBuffer s;
+        Writer<StringBuffer> writer(s);
+        writer.StartObject();
+
+        //FILL THE SPACES IN THE JSON FILE
+        writer.Key(BODY_KEY); //string name of the variable
+        writer.String(msg);
+
+        writer.Key(CODE_KEY);//reference referenceCount
+        writer.Int(code);
+
+        writer.EndObject();
+
+        return s.GetString();
+
+    }
 
     static string generateJson(Reference *obj) {
         const char *pointer = obj->getPointer();
@@ -192,7 +216,6 @@ public:
             obj->setReferenceCount(counter);
         }
     }
-
 
     static Reference readJson(const string &json, Reference *obj) {
         rapidjson::Document doc;

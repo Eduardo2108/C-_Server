@@ -11,6 +11,10 @@
 
 class Float : public GenericType {
 public:
+    Float() {
+
+    }
+
     Float(string key, const char *value) {
         this->addr = nullptr;
         this->value = value;

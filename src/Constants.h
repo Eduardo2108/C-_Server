@@ -33,7 +33,15 @@ static const char *const TYPE_KEY = "type";
 static const char *const SIZE_KEY = "size";
 static const char *const FIRST_VAR_KEY = "firstVariable";
 static const char *const SECOND_VAR_KEY = "secondVariable";
-static const char *const OPERATION_KEY= "operation";
+static const char *const OPERATION_KEY = "operation";
+
+//For responses
+static const char *const BODY_KEY = "message";
+static const char *const CODE_KEY = "statusCode";
+static const int NOT_FOUND = 404;
+static const int OK = 200;
+static const int NOT_IMPLEMENTED = 501;
+static const int INTERNAL_ERROR = 500;
 
 
 //|---------------------------| //
