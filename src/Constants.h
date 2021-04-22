@@ -21,6 +21,7 @@ enum SIZE {
 //|    * JSON CONSTANTS  *    | //
 //|---------------------------| //
 static const char *const KEY_VALUE = "key";
+static const char *const OFFSET_KEY = "offset";
 static const char *const COUNTER_VALUE = "referenceCount";
 static const char *const ADDRESS_VALUE = "addr";
 static const char *const VALUE_KEY = "value";

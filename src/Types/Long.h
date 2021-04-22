@@ -11,14 +11,6 @@ public:
 
     }
 
-    Long(string key, const char *value) {
-        this->addr = nullptr;
-        this->value = value;
-
-        this->size = LONG_SIZE;
-        this->key = key;
-        this->referenceCount = 0;
-    }
 
 };
 

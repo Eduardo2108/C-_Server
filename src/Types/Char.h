@@ -11,13 +11,6 @@ public:
 
     }
 
-    Char(string key, const char *value) {
-        this->size = CHAR_SIZE;
-        this->addr = nullptr;
-        this->key = key;
-        this->referenceCount = 0;
-        this->value = value;
-    }
 
 };
 

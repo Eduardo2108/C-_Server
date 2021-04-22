@@ -32,7 +32,7 @@ public:
         cout
                 << "\n ---- Response -----\n"
                 << "Status Code: " << this->statusCode << endl
-                << "Message: " << this->message << endl;
+                << "Message: " << this->message.c_str() << endl;
 
     }
 

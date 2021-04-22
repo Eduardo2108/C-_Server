@@ -15,16 +15,6 @@ public:
 
     }
 
-    Float(string key, const char *value) {
-        this->addr = nullptr;
-        this->value = value;
-        this->size = FLOAT_SIZE;
-        this->key = key;
-        this->referenceCount = 0;
-        this->value = value;
-
-    }
-
 };
 
 #endif //C__SERVER_FLOAT_H

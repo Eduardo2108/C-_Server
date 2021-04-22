@@ -12,9 +12,10 @@ using namespace std;
 int main() {
     auto *sm = new ServerManager();
 
-    string message = R"({"action":"CREATE","contentJson":"{\"key\":\"x\",\"value\":\"2\"}","type":"Integer","size":4})";
-    string message2 = R"({"action":"CREATE","contentJson":"{\"key\":\"z\",\"value\":\"24\"}","type":"Integer","size":4})";
-    string message3= R"({"action":"SEARCH", "firstVariable": "z" })";
+    string message = R"({"action":"CREATE","contentJson":"{\"key\":\"var\",\"value\":\"2\"}","type":"Integer","size":4})";
+    string message2 = R"({"action":"CREATE","contentJson":"{\"key\":\"zzz\",\"value\":\"245\"}","type":"Integer","size":4})";
+
+    string message3= R"({"action":"SEARCH", "firstVariable": "zzz" })";
 
 
     Message *msg = Json::readJsonMessage(message);
@@ -22,18 +23,18 @@ int main() {
     Message *msg3 = Json::readJsonMessage(message3);
 
 
-
     Response *r = sm->processRequest(msg);
+    r->show();
+    sm->getMemory()->show();
+
     Response *r2 = sm->processRequest(msg2);
-    Response *r3 = sm->processRequest(msg3);
+    r2->show();
+    sm->getMemory()->show();
+
+    //r3->show();
 
 
 
-
-   // r->show();
-   // r2->show();
-    r3->show();
-  //  sm->getMemory()->show();
     return 0;
 
 }

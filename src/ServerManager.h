@@ -37,11 +37,10 @@ public:
                 string json = msg->getContentJson();
                 int size = msg->getSize();
                 string type = msg->getType();
-                createElement(json, type, size);
+                string jsonGenerated = createElement(json, type, size);
                 result->setStatusCode(OK);
-                //todo: añadir el json como parte del mensaje
-                result->setMessage("Element created");
-            } catch (std::out_of_range *e) {
+                result->setMessage(jsonGenerated);
+            } catch (std::bad_alloc *e) {
                 result->setStatusCode(INTERNAL_ERROR);
                 result->setMessage(e->what());
             }
@@ -77,38 +76,45 @@ public:
         return result;
     }
 
-    void createElement(const string& json, string type, int size) {
+    string createElement(const string &json, string type, int size) {
         GenericType *obj;
+        string temp;
         if (type == INTEGER_KEY_WORD) {
             obj = new Integer();
+            obj->setType(type);
             obj = Json::readJson(json);
             obj->setSize(size);
             obj->setType(type);
-            memory->addElementDigits<int>(obj);
+            temp = memory->addElementDigits<int>(obj );
         }
         if (type == FLOAT_KEY_WORD) {
             obj = new Float();
+            obj->setType(type);
             obj = Json::readJson(json);
             obj->setSize(size);
-            memory->addElementDigits<float>(obj);
+            temp = memory->addElementDigits<float>(obj);
         }
         if (type == DOUBLE_KEY_WORD) {
             obj = new Double();
+            obj->setType(type);
+
             obj = Json::readJson(json);
             obj->setSize(size);
-            memory->addElementDigits<double>(obj);
+            temp = memory->addElementDigits<double>(obj);
         }
         if (type == CHAR_KEY_WORD) {
             obj = new Char();
+            obj->setType(type);
             obj = Json::readJson(json);
             obj->setSize(size);
-            memory->addElementChar(obj);
+            temp = memory->addElementChar(obj);
         }
         if (type == LONG_KEY_WORD) {
             obj = new Long();
+            obj->setType(type);
             obj = Json::readJson(json);
             obj->setSize(size);
-            memory->addElementDigits<long>(obj);
+            temp = memory->addElementDigits<long>(obj);
         }
         if (type == STRUCT_KEY_WORD) {
             cout << "Struct not implemented." << endl;
@@ -117,7 +123,8 @@ public:
             cout << "Struct not implemented." << endl;
 
         }
-        obj->setType(type);
+
+        return temp;
     }
 
     MemoryManagement *getMemory() const {

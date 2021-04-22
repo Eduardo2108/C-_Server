@@ -13,7 +13,7 @@ using namespace std;
 
 
 class GenericType {
-protected:
+private:
     /**Size in bytes of the variable*/
     int size;
     /**Address of where the variable its stored in the server, we get it from the server itself as a response
@@ -24,6 +24,12 @@ protected:
 public:
     const string &getType() const {
         return type;
+    }
+
+    friend ostream &operator<<(ostream &os, const GenericType &type) {
+        os << "size: " << type.size << " addr: " << type.addr << " offset: " << type.offset << " type: " << type.type
+           << " key: " << type.key << " value: " << type.value << " referenceCount: " << type.referenceCount;
+        return os;
     }
 
     void setType(const string &type) {
@@ -44,12 +50,7 @@ public:
     }
 
 public:
-    friend ostream &operator<<(ostream &os, const GenericType &type) {
-        os << "key: " << type.key << " value: " << type.value;
-        return os;
-    }
-
-protected:
+    private:
 
     /** Name of the variable, used for identifying the variable among the others, its an unique value
      * and it cannot be any of the reserved words of C!.
@@ -74,7 +75,7 @@ public:
 
     void setAddr(const char *addr) {
         GenericType::addr = addr;
-    }
+     }
 
     void setKey(const string &key) {
         GenericType::key = key;
@@ -97,6 +98,7 @@ public:
     }
 
     const char *getAddr() const {
+
         return this->addr;
     }
 
@@ -116,7 +118,7 @@ public:
 public:
 
     void show() {
-        cout << "{ Name: " << this->key << " Value: " << this->value << " Offset: " << this->offset << "}\n";
+        cout << "{ Name: " << this->key << " Value: " << this->value << " Address: " << this->addr << " Offset: " << this->offset << "}\n";
     }
 };
 

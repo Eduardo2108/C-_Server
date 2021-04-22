@@ -31,6 +31,9 @@ public:
         //GET THE VALUES FROM THE OBJECT
         const char *name = obj->getKey().c_str();
         int referenceCounter = obj->getCounter();
+        string addr = obj->getAddr();
+        int offset = obj->getOffset();
+
 
         //CAST THE VALUE TO CONST CHAR*
         std::ostringstream valueRaw;
@@ -38,13 +41,6 @@ public:
         string var = valueRaw.str();
         const char *B = var.c_str();
         const char *value = B;
-
-        //CAST THE ADDR TO CONST CHAR*
-        std::ostringstream address;
-        address << (void const *) obj->getAddr();
-        string addr = address.str();
-        const char *c = addr.c_str();
-        const char *addr_String = c;
 
         //CREATE WRITER
         StringBuffer s;
@@ -55,18 +51,25 @@ public:
         writer.Key(KEY_VALUE); //string name of the variable
         writer.String(name);
 
-        writer.Key(COUNTER_VALUE);//reference referenceCount
-        writer.Int(referenceCounter);
 
         writer.Key(ADDRESS_VALUE);//memory address
-        writer.String(addr_String);
+        writer.String(addr.c_str());
 
         writer.Key(VALUE_KEY);//value of the variable
         writer.Key(value);
 
+        writer.Key(OFFSET_KEY);//value of the variable
+        writer.Int(offset);
+
+        writer.Key(COUNTER_VALUE);//reference referenceCount
+        writer.Int(referenceCounter);
+
+        writer.Key(OFFSET_KEY);//offset
+        writer.Int(offset);
+
 
         writer.EndObject();
-
+        string result = s.GetString();
         return s.GetString();
 
     }
@@ -214,6 +217,14 @@ public:
         if (doc.HasMember(COUNTER_VALUE)) {
             int counter = doc[COUNTER_VALUE].GetInt();
             obj->setReferenceCount(counter);
+        }
+        if (doc.HasMember(OFFSET_KEY)) {
+            int offset = doc[OFFSET_KEY].GetInt();
+            obj->setOffset(offset);
+        }
+        if (doc.HasMember(TYPE_KEY)) {
+            string type = doc[TYPE_KEY].GetString();
+            obj->setType(type);
         }
         return obj;
     }

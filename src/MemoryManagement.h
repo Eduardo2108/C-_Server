@@ -37,11 +37,11 @@ private:
             T *temp = (T *) baseDir;
             *(temp + offset) = element;
             address = offset;
-            cout << "El elemento: " << element << " fué guardado en la posición: " << offset <<
+            /*cout << "El elemento: " << element << " fué guardado en la posición: " << offset <<
                  " con un tamaño de: " << sizeof(*(temp + offset)) <<
                  " bytes" << ", en una dirección de memoria de: "
                  << sizeof((temp + offset)) <<
-                 " bytes" << endl;
+                 " bytes" << endl;*/
             offset++;
         } else {
             availableAddresses->show();
@@ -85,14 +85,13 @@ public:
 
     void show() {
         cout << "-------Memory Map---------\n";
-        for (int i = 0; i < this->map->getLen(); ++i) {
+        int i = 0;
+        while (i < this->map->getLen()) {
             GenericType *obj = map->get(i);
-            cout << "Name: " << obj->getKey()
-                 << " | Offset: " << obj->getOffset()
-                 << " | Value: " << obj->getValue()
-                 << " | Type: " << obj->getType()
-                 << "\n-------------------" << endl;
+            obj->show();
+            i++;
         }
+
         cout << "-------Memory Block---------\n";
         for (int i = 1; i < offset; ++i) {
             cout << "Position: " << i << " | Value (Int): " << this->get<int>(i)
@@ -152,23 +151,36 @@ public:
     }
 
     template<typename T>
-    void addElementDigits(GenericType *obj) {
+    string addElementDigits(GenericType *obj) {
         auto *conv = new Converter();
         T element = conv->convertDigits<T>(obj->getValue());
-        int dir = this->addElement<T>(element);
+        int obj_offset = this->addElement<T>(element);
         //le asigno a el objeto el valor, para poder accesarlo luego.
-        obj->setOffset(dir);
+
+        T *temp = (T *) baseDir;
+        //CAST THE ADDR TO CONST CHAR*
+        std::ostringstream address;
+
+        address << ((temp + obj_offset));
+        const char *addr = address.str().c_str();
+        obj->setAddr(addr);
+        obj->setOffset(obj_offset);
         //agrego el objeto en el mapa de memoruia
-        this->map->append(obj);
-        this->show();
+        const string &jsonGenerated = Json::generateJson(obj);
+
+        GenericType *finalObj = Json::readJson(jsonGenerated);
+        this->map->append(finalObj);
+
+        return jsonGenerated;
     }
 
-    void addElementChar(GenericType *obj) {
+    string addElementChar(GenericType *obj) {
         int dir = this->addElement<char>(*obj->getValue());
         //le asigno a el objeto el valor, para poder accesarlo luego.
         obj->setOffset(dir);
         //agrego el objeto en el mapa de memoruia
         this->map->append(obj);
+        return Json::generateJson(obj);
     }
 
     void deleteElement(string key) {
