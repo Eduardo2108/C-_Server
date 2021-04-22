@@ -84,14 +84,15 @@ public:
     }
 
     void show() {
-        /*cout << "-------Memory Map---------\n";
+        cout << "-------Memory Map---------\n";
         for (int i = 0; i < this->map->getLen(); ++i) {
             GenericType *obj = map->get(i);
             cout << "Name: " << obj->getKey()
                  << " | Offset: " << obj->getOffset()
                  << " | Value: " << obj->getValue()
+                 << " | Type: " << obj->getType()
                  << "\n-------------------" << endl;
-        }*/
+        }
         cout << "-------Memory Block---------\n";
         for (int i = 1; i < offset; ++i) {
             cout << "Position: " << i << " | Value (Int): " << this->get<int>(i)
@@ -114,10 +115,31 @@ public:
         for (int i = 0; i < map->getLen(); ++i) {
             if (map->get(i)->getKey() == key) {
                 temp = map->get(i);
-                break;
             }
         }
         return temp;
+
+    }
+
+    template<typename T>
+    int operateVariable(string key, T var) {
+        int position = getElement(key)->getOffset();
+        T *temp = (T *) baseDir;
+        *(temp + position) = var;
+        return 1;
+    }
+
+    template<typename T>
+    int operate(string key1, string key2, string op) {
+        int index_1 = getElement(key1)->getOffset();
+        int index_2 = getElement(key2)->getOffset();
+        T value1 = get<T>(index_1);
+        T value2 = get<T>(index_2);
+
+        if (op == "=")
+            modify(index_1, value2);
+        if (op == "+")
+            modify(index_1, (value2 + value1));
     }
 
     /**
@@ -132,11 +154,13 @@ public:
     template<typename T>
     void addElementDigits(GenericType *obj) {
         auto *conv = new Converter();
-        int dir = this->addElement<T>(conv->convertDigits<T>(obj->getValue()));
+        T element = conv->convertDigits<T>(obj->getValue());
+        int dir = this->addElement<T>(element);
         //le asigno a el objeto el valor, para poder accesarlo luego.
         obj->setOffset(dir);
         //agrego el objeto en el mapa de memoruia
         this->map->append(obj);
+        this->show();
     }
 
     void addElementChar(GenericType *obj) {

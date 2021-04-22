@@ -194,8 +194,8 @@ public:
 
     }
 
-    static void readJson(const string &json, GenericType *obj) {
-
+    static GenericType *readJson(const string &json) {
+        GenericType *obj = new GenericType();
         rapidjson::Document doc;
         doc.Parse<kParseDefaultFlags>(json.c_str());
 
@@ -215,6 +215,7 @@ public:
             int counter = doc[COUNTER_VALUE].GetInt();
             obj->setReferenceCount(counter);
         }
+        return obj;
     }
 
     static Reference readJson(const string &json, Reference *obj) {

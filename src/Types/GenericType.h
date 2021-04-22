@@ -1,4 +1,3 @@
-//
 // Created by eduardo218 on 4/5/21.
 //
 
@@ -17,11 +16,20 @@ class GenericType {
 protected:
     /**Size in bytes of the variable*/
     int size;
-
     /**Address of where the variable its stored in the server, we get it from the server itself as a response
      * of the method "create"*/
     const char *addr;
     int offset;
+    string type;
+public:
+    const string &getType() const {
+        return type;
+    }
+
+    void setType(const string &type) {
+        GenericType::type = type;
+    }
+
 public:
     int getOffset() const {
         return offset;

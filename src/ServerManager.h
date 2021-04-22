@@ -30,7 +30,7 @@ private:
 
 public:
     Response *processRequest(Message *msg) {
-        Response *result = new Response();
+        auto *result = new Response();
         string action = msg->getAction();
         if (action == CREATE) {
             try {
@@ -39,19 +39,39 @@ public:
                 string type = msg->getType();
                 createElement(json, type, size);
                 result->setStatusCode(OK);
+                //todo: añadir el json como parte del mensaje
                 result->setMessage("Element created");
-            } catch (std::exception *e) {
+            } catch (std::out_of_range *e) {
                 result->setStatusCode(INTERNAL_ERROR);
                 result->setMessage(e->what());
             }
         }
         if (action == MODIFY) {
-            string firstVar = msg->getFirstVariable();
-            string second = msg->getSecondVariable();
-            string op = msg->getOperation();
+            try {
+                string firstVar = msg->getFirstVariable();
+                string second = msg->getSecondVariable();
+                string op = msg->getOperation();
+                //todo: get del tipo de dato de las variables para pasarlas como parametro (listas)
+
+            } catch (std::exception e) {
+
+            }
         }
         if (action == SEARCH) {
             string firstVar = msg->getFirstVariable();
+            try {
+                GenericType *obj = memory->getElement(firstVar);
+                if (!obj) {
+                    throw obj;
+                }
+                string json = Json::generateJson(obj);
+                result->setMessage(json);
+                result->setStatusCode(200);
+            }
+            catch (GenericType *e) {
+                result->setStatusCode(NOT_FOUND);
+                result->setMessage("Variable not found");
+            }
 
         }
         return result;
@@ -59,34 +79,34 @@ public:
 
     void createElement(const string& json, string type, int size) {
         GenericType *obj;
-
         if (type == INTEGER_KEY_WORD) {
             obj = new Integer();
-            Json::readJson(json, obj);
+            obj = Json::readJson(json);
             obj->setSize(size);
+            obj->setType(type);
             memory->addElementDigits<int>(obj);
         }
         if (type == FLOAT_KEY_WORD) {
             obj = new Float();
-            Json::readJson(json, obj);
+            obj = Json::readJson(json);
             obj->setSize(size);
             memory->addElementDigits<float>(obj);
         }
         if (type == DOUBLE_KEY_WORD) {
             obj = new Double();
-            Json::readJson(json, obj);
+            obj = Json::readJson(json);
             obj->setSize(size);
             memory->addElementDigits<double>(obj);
         }
         if (type == CHAR_KEY_WORD) {
             obj = new Char();
-            Json::readJson(json, obj);
+            obj = Json::readJson(json);
             obj->setSize(size);
             memory->addElementChar(obj);
         }
         if (type == LONG_KEY_WORD) {
             obj = new Long();
-            Json::readJson(json, obj);
+            obj = Json::readJson(json);
             obj->setSize(size);
             memory->addElementDigits<long>(obj);
         }
@@ -97,9 +117,11 @@ public:
             cout << "Struct not implemented." << endl;
 
         }
+        obj->setType(type);
+    }
 
-        memory->show();
-
+    MemoryManagement *getMemory() const {
+        return memory;
     }
 
     ServerManager() {
