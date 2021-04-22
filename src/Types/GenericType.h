@@ -58,7 +58,7 @@ public:
     string key;
 
     /** Value stored in the variable*/
-    const char *value;
+    string value;
 
     /**Reference counter on the variable*/
     int referenceCount;
@@ -89,7 +89,7 @@ public:
         return !(rhs == *this);
     }
 
-    void setValue(const char *value) {
+    void setValue(string value) {
         this->value = value;
     }
 
@@ -106,7 +106,7 @@ public:
         return key;
     }
 
-    const char *getValue() const {
+    string getValue() const {
         return value;
     }
 

@@ -37,11 +37,6 @@ private:
             T *temp = (T *) baseDir;
             *(temp + offset) = element;
             address = offset;
-            /*cout << "El elemento: " << element << " fué guardado en la posición: " << offset <<
-                 " con un tamaño de: " << sizeof(*(temp + offset)) <<
-                 " bytes" << ", en una dirección de memoria de: "
-                 << sizeof((temp + offset)) <<
-                 " bytes" << endl;*/
             offset++;
         } else {
             availableAddresses->show();
@@ -84,21 +79,27 @@ public:
     }
 
     void show() {
-        cout << "-------Memory Map---------\n";
+        updateVariables();
+        cout << "\n\n-------Memory Map---------\n";
         int i = 0;
         while (i < this->map->getLen()) {
             GenericType *obj = map->get(i);
-            obj->show();
+            string VAL = obj->getValue();
+            cout << "Name: " << obj->getKey()
+                 << " | Offset: " << obj->getOffset()
+                 << " | Value: " << VAL
+                 << " | Type: " << obj->getType()
+                 << "\n-------------------" << endl;
             i++;
         }
 
         cout << "-------Memory Block---------\n";
-        for (int i = 1; i < offset; ++i) {
-            cout << "Position: " << i << " | Value (Int): " << this->get<int>(i)
-                 << " | Value (Float): " << this->get<float>(i)
-                 << " | Value (Double): " << this->get<double>(i)
-                 << " | Value (Long): " << this->get<long>(i)
-                 << " | Value (Char): " << this->get<char>(i) << endl
+        for (int j = 1; j < offset; ++j) {
+            cout << "Position: " << j << " | Value (Int): " << this->get<int>(j)
+                 << " | Value (Float): " << this->get<float>(j)
+                 << " | Value (Double): " << this->get<double>(j)
+                 << " | Value (Long): " << this->get<long>(j)
+                 << " | Value (Char): " << this->get<char>(j) << endl
                  << "\n-------------------" << endl;
         }
     }
@@ -110,6 +111,7 @@ public:
      * @return GenericType object if found. nullptr if the element is not in the memory map.
      */
     GenericType *getElement(const string &key) {
+        updateVariables();
         GenericType *temp = nullptr;
         for (int i = 0; i < map->getLen(); ++i) {
             if (map->get(i)->getKey() == key) {
@@ -152,8 +154,9 @@ public:
 
     template<typename T>
     string addElementDigits(GenericType *obj) {
+
         auto *conv = new Converter();
-        T element = conv->convertDigits<T>(obj->getValue());
+        T element = conv->convertDigits<T>(obj->getValue().c_str());
         int obj_offset = this->addElement<T>(element);
         //le asigno a el objeto el valor, para poder accesarlo luego.
 
@@ -169,13 +172,14 @@ public:
         const string &jsonGenerated = Json::generateJson(obj);
 
         GenericType *finalObj = Json::readJson(jsonGenerated);
+        finalObj->setType(obj->getType());
         this->map->append(finalObj);
 
         return jsonGenerated;
     }
 
     string addElementChar(GenericType *obj) {
-        int dir = this->addElement<char>(*obj->getValue());
+        int dir = this->addElement<char>(*obj->getValue().c_str());
         //le asigno a el objeto el valor, para poder accesarlo luego.
         obj->setOffset(dir);
         //agrego el objeto en el mapa de memoruia
@@ -193,6 +197,50 @@ public:
         this->map->del(obj);
         this->availableAddresses->queue(obj->getOffset());
         this->map->del(obj);
+    }
+
+    void uptadeValue(GenericType *obj) {
+
+        if (obj->getType() == INTEGER_KEY_WORD) {
+            auto var = get<int>(obj->getOffset());
+            const char *value = std::to_string(var).c_str();
+            obj->setValue(value);
+            cout << var << endl;
+        } else if (obj->getType() == DOUBLE_KEY_WORD) {
+
+            auto var = get<double>(obj->getOffset());
+            obj->setValue(std::to_string(var).c_str());
+
+            cout << var << endl;
+        } else if (obj->getType() == FLOAT_KEY_WORD) {
+            auto var = get<float>(obj->getOffset());
+            obj->setValue(std::to_string(var).c_str());
+
+            cout << var << endl;
+        } else if (obj->getType() == LONG_KEY_WORD) {
+            auto var = get<long>(obj->getOffset());
+            obj->setValue(std::to_string(var).c_str());
+
+            cout << var << endl;
+        } else if (obj->getType() == CHAR_KEY_WORD) {
+            auto var = get<char>(obj->getOffset());
+            obj->setValue(std::to_string(var).c_str());
+
+            cout << var << endl;
+        } else if (obj->getType() == INTEGER_KEY_WORD) {
+            cout << "Struct not implemented." << endl;
+        } else if (obj->getType() == INTEGER_KEY_WORD) {
+            cout << "Struct not implemented." << endl;
+
+        }
+    }
+
+    void updateVariables() {
+
+        for (int i = 0; i < this->map->getLen(); ++i) {
+            this->uptadeValue(this->map->get(i));
+            cout << "List updated!!" << endl;
+        }
     }
 };
 

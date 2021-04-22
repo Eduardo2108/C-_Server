@@ -12,10 +12,9 @@ using namespace std;
 int main() {
     auto *sm = new ServerManager();
 
+    string message2 = R"({"action":"CREATE","contentJson":"{\"key\":\"help\",\"value\":\"666.6\"}","type":"Float","size":4})";
     string message = R"({"action":"CREATE","contentJson":"{\"key\":\"var\",\"value\":\"2\"}","type":"Integer","size":4})";
-    string message2 = R"({"action":"CREATE","contentJson":"{\"key\":\"zzz\",\"value\":\"245\"}","type":"Integer","size":4})";
-
-    string message3= R"({"action":"SEARCH", "firstVariable": "zzz" })";
+    string message3 = R"({"action":"SEARCH", "firstVariable": "help" })";
 
 
     Message *msg = Json::readJsonMessage(message);
@@ -24,10 +23,12 @@ int main() {
 
 
     Response *r = sm->processRequest(msg);
-    r->show();
-    sm->getMemory()->show();
-
     Response *r2 = sm->processRequest(msg2);
+
+    Response *r3 = sm->processRequest(msg3);
+
+
+    r->show();
     r2->show();
     sm->getMemory()->show();
 
