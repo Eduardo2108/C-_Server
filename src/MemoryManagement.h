@@ -212,8 +212,7 @@ public:
         this->map->append(obj_to_add);
         return Json::generateJson(obj_to_add);
     }
-
-    //fixme: TEST
+     //fixme: TEST AND IMPLEMENT.
     void deleteElement(string key) {
         GenericType *obj = this->getElement(key);
         long *temp = (long *) this->baseDir;
@@ -270,7 +269,6 @@ public:
      * Main method for updating variables on the memory, runs "uptadeVariables_aux" for all the elements on the memory map.
      */
     void updateVariables() {
-
         for (int i = 0; i < this->map->getLen(); ++i) {
             this->uptadeVariables_aux(this->map->get(i));
         }
