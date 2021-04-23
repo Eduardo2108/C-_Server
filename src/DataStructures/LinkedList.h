@@ -1,4 +1,4 @@
-//
+    //
 // Created by eduardo218 on 4/5/21.
 //
 
@@ -6,7 +6,7 @@
 #define C__SERVER_LINKEDLIST_H
 
 #include <ostream>
-
+#include <string>
 using namespace std;
 
 template<typename T>

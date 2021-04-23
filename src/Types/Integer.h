@@ -10,15 +10,10 @@
 
 class Integer : public GenericType{
 public:
-    Integer(string key, const char *value) {
-
-        this->size = INT_SIZE;
-        this->referenceCount = 0;
-        this->addr = nullptr;
-        this->key = key;
-        this->value = value;
+    Integer() {
 
     }
+
 };
 
 #endif //C__SERVER_INTEGER_H

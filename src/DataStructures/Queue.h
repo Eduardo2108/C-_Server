@@ -17,7 +17,7 @@ public:
     }
 
     void queue(T element) {
-        this->list.append(element);
+        this->list->append(element);
     }
 
     T peek() {
@@ -26,6 +26,11 @@ public:
 
     void deQueue() {
         this->list->delHead();
+    }
+
+    void show() {
+        this->list->show();
+
     }
 };
 

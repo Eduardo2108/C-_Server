@@ -1,4 +1,3 @@
-//
 // Created by eduardo218 on 4/5/21.
 //
 
@@ -7,19 +6,36 @@
 
 
 #include <ostream>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
 
 class GenericType {
-protected:
+private:
     /**Size in bytes of the variable*/
     int size;
-
     /**Address of where the variable its stored in the server, we get it from the server itself as a response
      * of the method "create"*/
     const char *addr;
     int offset;
+    string type;
+public:
+    const string &getType() const {
+        return type;
+    }
+
+    friend ostream &operator<<(ostream &os, const GenericType &type) {
+        os << "size: " << type.size << " addr: " << type.addr << " offset: " << type.offset << " type: " << type.type
+           << " key: " << type.key << " value: " << type.value << " referenceCount: " << type.referenceCount;
+        return os;
+    }
+
+    void setType(const string &type) {
+        GenericType::type = type;
+    }
+
 public:
     int getOffset() const {
         return offset;
@@ -34,12 +50,7 @@ public:
     }
 
 public:
-    friend ostream &operator<<(ostream &os, const GenericType &type) {
-        os << "key: " << type.key << " value: " << type.value;
-        return os;
-    }
-
-protected:
+    private:
 
     /** Name of the variable, used for identifying the variable among the others, its an unique value
      * and it cannot be any of the reserved words of C!.
@@ -47,7 +58,7 @@ protected:
     string key;
 
     /** Value stored in the variable*/
-    const char *value;
+    string value;
 
     /**Reference counter on the variable*/
     int referenceCount;
@@ -64,7 +75,7 @@ public:
 
     void setAddr(const char *addr) {
         GenericType::addr = addr;
-    }
+     }
 
     void setKey(const string &key) {
         GenericType::key = key;
@@ -78,7 +89,7 @@ public:
         return !(rhs == *this);
     }
 
-    void setValue(const char *value) {
+    void setValue(string value) {
         this->value = value;
     }
 
@@ -87,6 +98,7 @@ public:
     }
 
     const char *getAddr() const {
+
         return this->addr;
     }
 
@@ -94,7 +106,7 @@ public:
         return key;
     }
 
-    const char *getValue() const {
+    string getValue() const {
         return value;
     }
 
@@ -106,7 +118,7 @@ public:
 public:
 
     void show() {
-        cout << "{ Name: " << this->key << " Value: " << this->value << " Address: " << this->addr << "}\n";
+        cout << "{ Name: " << this->key << " Value: " << this->value << " Address: " << this->addr << " Offset: " << this->offset << "}\n";
     }
 };
 

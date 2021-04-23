@@ -4,6 +4,7 @@
 
 #ifndef C__SERVER_CONVERTER_H
 #define C__SERVER_CONVERTER_H
+
 #include "string"
 
 class Converter {

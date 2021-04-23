@@ -5,17 +5,23 @@
 #ifndef C__SERVER_JSON_H
 #define C__SERVER_JSON_H
 
+
 #include "../../librerias/rapidjson/stringbuffer.h"
 #include "../../librerias/rapidjson/writer.h"
-#include "../../librerias/rapidjson/document.h"
+
 #include <sstream>
 #include "iostream"
 #include "../Types/GenericType.h"
-#include "../Types/Integer.h"
 #include "../Types/Reference.h"
+#include "../../librerias/rapidjson/document.h"
+#include "../Constants.h"
+#include "Coms/Message.h"
+#include "Coms/Response.h"
+
 
 using namespace rapidjson;
 using namespace std;
+
 
 class Json {
     //TODO: hacer singleton
@@ -25,6 +31,9 @@ public:
         //GET THE VALUES FROM THE OBJECT
         const char *name = obj->getKey().c_str();
         int referenceCounter = obj->getCounter();
+        string addr = obj->getAddr();
+        int offset = obj->getOffset();
+
 
         //CAST THE VALUE TO CONST CHAR*
         std::ostringstream valueRaw;
@@ -33,12 +42,42 @@ public:
         const char *B = var.c_str();
         const char *value = B;
 
-        //CAST THE ADDR TO CONST CHAR*
-        std::ostringstream address;
-        address << (void const *) obj->getAddr();
-        string addr = address.str();
-        const char *c = addr.c_str();
-        const char *addr_String = c;
+        //CREATE WRITER
+        StringBuffer s;
+        Writer <StringBuffer> writer(s);
+        writer.StartObject();
+
+        //FILL THE SPACES IN THE JSON FILE
+        writer.Key(KEY_VALUE); //string name of the variable
+        writer.String(name);
+
+
+        writer.Key(ADDRESS_VALUE);//memory address
+        writer.String(addr.c_str());
+
+        writer.Key(VALUE_KEY);//value of the variable
+        writer.Key(value);
+
+        writer.Key(OFFSET_KEY);//value of the variable
+        writer.Int(offset);
+
+        writer.Key(COUNTER_VALUE);//reference referenceCount
+        writer.Int(referenceCounter);
+
+        writer.Key(OFFSET_KEY);//offset
+        writer.Int(offset);
+
+
+        writer.EndObject();
+        string result = s.GetString();
+        return s.GetString();
+
+    }
+
+    static string generateJson(Response *obj) {
+        //GET THE VALUES FROM THE OBJECT
+        const char *msg = obj->getMessage().c_str();
+        int code = obj->getStatusCode();
 
         //CREATE WRITER
         StringBuffer s;
@@ -46,25 +85,17 @@ public:
         writer.StartObject();
 
         //FILL THE SPACES IN THE JSON FILE
-        writer.Key(KEY_VALUE); //string name of the variable
-        writer.String(name);
+        writer.Key(BODY_KEY); //string name of the variable
+        writer.String(msg);
 
-        writer.Key(COUNTER_VALUE);//reference referenceCount
-        writer.Int(referenceCounter);
-
-        writer.Key(ADDRESS_VALUE);//memory address
-        writer.String(addr_String);
-
-        writer.Key(VALUE_KEY);//value of the variable
-        writer.Key(value);
-
+        writer.Key(CODE_KEY);//reference referenceCount
+        writer.Int(code);
 
         writer.EndObject();
 
         return s.GetString();
 
     }
-
 
     static string generateJson(Reference *obj) {
         const char *pointer = obj->getPointer();
@@ -75,7 +106,7 @@ public:
 
         //CREATE WRITER
         StringBuffer s;
-        Writer<StringBuffer> writer(s);
+        Writer <StringBuffer> writer(s);
         writer.StartObject();
 
         //IF THE REFERENCE HAS A POINTER TO A VALUE
@@ -112,17 +143,17 @@ public:
         return s.GetString();
 
     }
-/*
 
     static string generateJson(Message *msg) {
         //CREATE WRITER
         StringBuffer s;
+
         Writer<StringBuffer> writer(s);
         writer.StartObject();
-        */
-/*  "CREATE" - FOR CREATING AN INSTANCE\n
+
+        /**  "CREATE" - FOR CREATING AN INSTANCE\n
         *  "MODIFY" - FOR MODIFYING AN EXISTING INSTANCE\n
-        *  "SEARCH" - FOR SEARCHING AN INSTANCE*//*
+        *  "SEARCH" - FOR SEARCHING AN INSTANCE*/
 
         //FILL THE SPACES IN THE JSON FILE
         if (msg->getAction() == CREATE) {
@@ -165,10 +196,9 @@ public:
         return s.GetString();
 
     }
-*/
 
-    static void readJson(const string &json, GenericType *obj) {
-
+    static GenericType *readJson(const string &json) {
+        GenericType *obj = new GenericType();
         rapidjson::Document doc;
         doc.Parse<kParseDefaultFlags>(json.c_str());
 
@@ -188,18 +218,22 @@ public:
             int counter = doc[COUNTER_VALUE].GetInt();
             obj->setReferenceCount(counter);
         }
+        if (doc.HasMember(OFFSET_KEY)) {
+            int offset = doc[OFFSET_KEY].GetInt();
+            obj->setOffset(offset);
+        }
+        if (doc.HasMember(TYPE_KEY)) {
+            string type = doc[TYPE_KEY].GetString();
+            obj->setType(type);
+        }
+        return obj;
     }
-
 
     static Reference readJson(const string &json, Reference *obj) {
         rapidjson::Document doc;
         doc.Parse<kParseDefaultFlags>(json.c_str());
 
-        if (doc.HasMember(KEY_VALUE)) {
-            const char *keyName = doc[KEY_VALUE].GetString();
-            obj->setKey(keyName);
 
-        }
         if (doc.HasMember(ADDRESS_VALUE)) {
             const char *addr = (doc[ADDRESS_VALUE].GetString());
             obj->setAddr(addr);
@@ -210,6 +244,41 @@ public:
         }
         return *obj;
     }
+
+    static Message *readJsonMessage(const string &json) {
+        Message *msg = new Message();
+        rapidjson::Document doc;
+        doc.Parse<kParseDefaultFlags>(json.c_str());
+        if (doc.HasMember(ACTION_KEY)) {
+            const char *action = doc[ACTION_KEY].GetString();
+            msg->setAction(action);
+        }
+        if (doc.HasMember(CONTENT_KEY)) {
+            msg->setContentJson(doc[CONTENT_KEY].GetString());
+        }
+        if (doc.HasMember(SIZE_KEY)) {
+            msg->setSize(doc[SIZE_KEY].GetInt());
+        }
+        if (doc.HasMember(TYPE_KEY)) {
+            msg->setType(doc[TYPE_KEY].GetString());
+        }
+
+        if (doc.HasMember(FIRST_VAR_KEY)) {
+            msg->setFirstVariable(doc[FIRST_VAR_KEY].GetString());
+        }
+
+        if (doc.HasMember(FIRST_VAR_KEY)) {
+            msg->setFirstVariable(doc[FIRST_VAR_KEY].GetString());
+        }
+        if (doc.HasMember(SECOND_VAR_KEY)) {
+            msg->setSecondVariable(doc[SECOND_VAR_KEY].GetString());
+        }
+        if (doc.HasMember(OPERATION_KEY)) {
+            msg->setOperation(doc[OPERATION_KEY].GetString());
+        }
+        return msg;
+    }
+
 
 };
 
