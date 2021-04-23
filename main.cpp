@@ -30,14 +30,9 @@ int main() {
     string msg3 = R"({"action":"MODIFY", "firstVariable": "help", "secondVariable":"var", "operation":"+" })";
 
 
-    Response *r = ServerManager::getInstance()->processRequest(msg);
-    Response *r2 = ServerManager::getInstance()->processRequest(msg2);
-    Response *r3 = ServerManager::getInstance()->processRequest(msg3);
-
-
-    cout << Json::generateJson(r) << endl;
-    cout << Json::generateJson(r2) << endl;
-    cout << Json::generateJson(r3) << endl;
+    cout << ServerManager::getInstance()->processRequest(msg) << endl;
+    cout << ServerManager::getInstance()->processRequest(msg2) << endl;
+    cout << ServerManager::getInstance()->processRequest(msg3) << endl;
 
 
 }

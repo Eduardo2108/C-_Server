@@ -98,7 +98,8 @@ public:
 
             client_message = string(buf, 0, bytesReceived);
             cout << client_message <<endl;
-            ServerManager::getInstance()->processRequest(client_message)->show();
+            //todo: send this to the client -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+            cout << ServerManager::getInstance()->processRequest(client_message);
 
             // Echo message back to client
             send(clientSocket, buf, bytesReceived + 1, 0);

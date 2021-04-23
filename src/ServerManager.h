@@ -35,7 +35,7 @@ public:
 
     string operate(string basicString, string basicString1, string basicString2);
 
-    Response *processRequest(string string1) {
+    string processRequest(string string1) {
         Message *msg = Json::readJsonMessage(string1);
         auto *result = new Response();
         string action = msg->getAction();
@@ -83,7 +83,8 @@ public:
                 result->setLog(log);
             }
         }
-        return result;
+        return Json::generateJson(result);
+
     }
 
     string createElement(const string &json, string type, int size, Response *response) {
