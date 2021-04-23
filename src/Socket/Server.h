@@ -16,6 +16,7 @@
 #include <cstring>
 #include <string>
 #include <thread>
+#include "../ServerManager.h"
 
 using namespace std;
 
@@ -96,8 +97,8 @@ public:
 
 
             client_message = string(buf, 0, bytesReceived);
-            cout << client_message << endl;
-
+            cout << client_message <<endl;
+            ServerManager::getInstance()->processRequest(client_message)->show();
 
             // Echo message back to client
             send(clientSocket, buf, bytesReceived + 1, 0);

@@ -22,14 +22,18 @@
 class ServerManager {
 
 private:
-    MemoryManagement *memory = new MemoryManagement(1000);
+    MemoryManagement *memory;
     LinkedList<string> *TYPE_IDENTIFIER_LIST;
     LinkedList<string> *SUPPORTED_OPERTATOR_LIST;
     LinkedList<int> *TYPE_SIZES_LIST;
+    static ServerManager* instance;
+    ServerManager();
 
 
 public:
-    Response *processRequest(Message *msg) {
+    static ServerManager *getInstance();
+    Response *processRequest(string string1) {
+        Message *msg = Json::readJsonMessage(string1);
         auto *result = new Response();
         string action = msg->getAction();
         if (action == CREATE) {
@@ -122,32 +126,6 @@ public:
     MemoryManagement *getMemory() const {
         return memory;
     }
-
-    ServerManager() {
-
-        TYPE_IDENTIFIER_LIST = new LinkedList<string>();
-        TYPE_SIZES_LIST = new LinkedList<int>();
-
-        TYPE_IDENTIFIER_LIST->append(INTEGER_KEY_WORD);
-        TYPE_SIZES_LIST->append(INT_SIZE);
-
-        TYPE_IDENTIFIER_LIST->append(FLOAT_KEY_WORD);
-        TYPE_SIZES_LIST->append(FLOAT_SIZE);
-
-        TYPE_IDENTIFIER_LIST->append(DOUBLE_KEY_WORD);
-        TYPE_SIZES_LIST->append(DOUBLE_SIZE);
-
-        TYPE_IDENTIFIER_LIST->append(CHAR_KEY_WORD);
-        TYPE_SIZES_LIST->append(CHAR_SIZE);
-
-        TYPE_IDENTIFIER_LIST->append(LONG_KEY_WORD);
-        TYPE_SIZES_LIST->append(LONG_SIZE);
-
-        TYPE_IDENTIFIER_LIST->append(REFERENCE_KEY_WORD);
-        TYPE_SIZES_LIST->append(REFERENCE_SIZE);
-
-    }
-
 };
 
 

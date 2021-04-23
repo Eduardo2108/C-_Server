@@ -8,6 +8,7 @@
 #include "string"
 #include <ostream>
 #include "Message.h"
+#include "iostream"
 
 using namespace std;
 
