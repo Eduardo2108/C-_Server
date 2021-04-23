@@ -131,16 +131,21 @@ public:
     }
 
     template<typename T>
-    int operate(string key1, string key2, string op) {
+    string operate(string key1, string key2, string op) {
         int index_1 = getElement(key1)->getOffset();
         int index_2 = getElement(key2)->getOffset();
+
         T value1 = get<T>(index_1);
         T value2 = get<T>(index_2);
 
-        if (op == "=")
-            modify(index_1, value2);
-        if (op == "+")
-            modify(index_1, (value2 + value1));
+        if (op == "=") {
+            modify<T>(index_1, value2);
+            return "Operation = realized";
+        }
+        if (op == "+") {
+            modify<T>(index_1, (value2 + value1));
+            return "Operation + realized";
+        }
     }
 
     /**

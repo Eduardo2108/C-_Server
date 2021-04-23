@@ -32,6 +32,9 @@ private:
 
 public:
     static ServerManager *getInstance();
+
+    string operate(string basicString, string basicString1, string basicString2);
+
     Response *processRequest(string string1) {
         Message *msg = Json::readJsonMessage(string1);
         auto *result = new Response();
@@ -53,7 +56,9 @@ public:
                 string firstVar = msg->getFirstVariable();
                 string second = msg->getSecondVariable();
                 string op = msg->getOperation();
-                //todo: get del tipo de dato de las variables para pasarlas como parametro (listas)
+                string res = this->operate(firstVar, second, op);
+                result->setStatusCode(OK);
+                result->setMessage(res);
 
             } catch (std::exception e) {
 
@@ -84,42 +89,41 @@ public:
          string temp;
         if (type == INTEGER_KEY_WORD) {
             auto *obj = new Integer();
-            obj->setType(type);
             obj = static_cast<Integer *>(Json::readJson(json));
             obj->setSize(size);
             obj->setType(type);
             temp = memory->addElementDigits<int>(obj);
         } else if (type == FLOAT_KEY_WORD) {
             auto *obj = new Float();
-            obj->setType(type);
             obj = static_cast<Float *>(Json::readJson(json));
+            obj->setType(type);
             obj->setSize(size);
             temp = memory->addElementDigits<float>(obj);
         } else if (type == DOUBLE_KEY_WORD) {
             auto *obj = new Double();
-            obj->setType(type);
             obj = static_cast<Double *>(Json::readJson(json));
+            obj->setType(type);
             obj->setSize(size);
             temp = memory->addElementDigits<double>(obj);
-        } /*else if (type == CHAR_KEY_WORD) {
-            obj = new Char();
+        } else if (type == CHAR_KEY_WORD) {
+            auto *obj = new Char();
+            obj = static_cast<Char *>(Json::readJson(json));
             obj->setType(type);
-            obj = Json::readJson(json);
             obj->setSize(size);
-            temp = memory->addElementChar(obj);
+            temp = memory->addElementDigits<double>(obj);
         } else if (type == LONG_KEY_WORD) {
-            obj = new Long();
+            auto *obj = new Long();
+            obj = static_cast<Long *>(Json::readJson(json));
             obj->setType(type);
-            obj = Json::readJson(json);
             obj->setSize(size);
-            temp = memory->addElementDigits<long>(obj);
+            temp = memory->addElementDigits<double>(obj);
         } else if (type == STRUCT_KEY_WORD) {
             cout << "Struct not implemented." << endl;
         } else if (type == REFERENCE_KEY_WORD) {
             cout << "Struct not implemented." << endl;
 
         }
-*/
+
         return temp;
     }
 

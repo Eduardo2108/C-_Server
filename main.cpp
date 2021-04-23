@@ -9,6 +9,7 @@
 
 using namespace std;
 
+/*
 void RunServer(){
     Server::getInstance()->InitServer();
     cout << "Server ON" << endl;
@@ -19,34 +20,28 @@ int main() {
     RunS.join();
     return 0;
 }
-
-/*
-int main() {*/
-    /*
-    auto *sm = new ServerManager();
-
-    string message2 = R"({"action":"CREATE","contentJson":"{\"key\":\"help\",\"value\":\"666.6\"}","type":"Float","size":4})";
-    string message = R"({"action":"CREATE","contentJson":"{\"key\":\"var\",\"value\":\"2\"}","type":"Integer","size":4})";
-    string message3 = R"({"action":"SEARCH", "firstVariable": "help" })";
+*/
 
 
-    Message *msg = Json::readJsonMessage(message);
-    Message *msg2 = Json::readJsonMessage(message2);
-    Message *msg3 = Json::readJsonMessage(message3);
+int main() {
+
+    string msg = R"({"action":"CREATE","contentJson":"{\"key\":\"help\",\"value\":\"1\"}","type":"Integer","size":4})";
+    string msg2 = R"({"action":"CREATE","contentJson":"{\"key\":\"var\",\"value\":\"666\"}","type":"Integer","size":4})";
+    string msg3 = R"({"action":"MODIFY", "firstVariable": "help", "secondVariable":"var", "operation":"+" })";
 
 
-    Response *r = sm->processRequest(msg);
-    Response *r2 = sm->processRequest(msg2);
+    Response *r = ServerManager::getInstance()->processRequest(msg);
+    Response *r2 = ServerManager::getInstance()->processRequest(msg2);
+    ServerManager::getInstance()->getMemory()->show();
 
-    Response *r3 = sm->processRequest(msg3);
+    Response *r3 = ServerManager::getInstance()->processRequest(msg3);
 
 
-    r->show();
-    r2->show();
-    sm->getMemory()->show();
+
+    r3->show();
+    ServerManager::getInstance()->getMemory()->show();
 
     //r3->show();
 
-
-    */
+}
 
