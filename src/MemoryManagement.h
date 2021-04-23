@@ -161,7 +161,8 @@ public:
 
     template<typename T>
     string addElementDigits(GenericType *obj) {
-
+        if (this->getElement(obj->getKey()))
+            return "";
         auto *conv = new Converter();
         T element = conv->convertDigits<T>(obj->getValue().c_str());
         int obj_offset = this->addElement<T>(element);

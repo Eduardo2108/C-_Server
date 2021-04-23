@@ -81,16 +81,16 @@ public:
         GenericType::key = key;
     }
 
+        void setValue(string value) {
+        this->value = value;
+    }
+
     bool operator==(const GenericType &rhs) const {
         return key == rhs.key;
     }
 
     bool operator!=(const GenericType &rhs) const {
         return !(rhs == *this);
-    }
-
-    void setValue(string value) {
-        this->value = value;
     }
 
     void setReferenceCount(int referenceCount) {

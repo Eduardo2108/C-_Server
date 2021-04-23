@@ -52,6 +52,7 @@ static const int INTERNAL_ERROR = 500;
 static const auto MODIFY = "MODIFY";
 static const auto CREATE = "CREATE";
 static const auto SEARCH = "SEARCH";
+static const auto HALT = "HALT";
 
 //|---------------------------| //
 //|   * COMPILER SETTINGS  *  | //
@@ -71,6 +72,7 @@ static const auto EQUAL_OPERATOR = "=";
 
 // **** ERROR MESSAGES AND LOGS **** //
 static const char *const ERROR_DATA_TYPE = " : is not a valid identifier.";
+static const char *const ERROR_VARIABLE_REPEATED = " is already defined in this scope.";
 static const char *const LOG_VARIABLE_CREATED = " was created.";
 static const char *const LOG_VARIABLE_MODIFYIED = " value was set to: ";
 static const char *const ERROR_OPERATOR_ASSIGN_VALUE = ": is not a supported operator.";
