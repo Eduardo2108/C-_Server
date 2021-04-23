@@ -3,9 +3,12 @@
 //
 
 #include <iostream>
+#include <cstring>
 #include "string"
 #include "Server.h"
 #include "stdio.h"
+
+using namespace std;
 
 Server *Server::instance = nullptr;
 
@@ -56,7 +59,7 @@ void Server::Start() {
     while (true)
     {
         std::cout << "Im running" << std::endl;
-        memset(buf, 0, 4096);
+        wmemset(reinterpret_cast<wchar_t *>(buf), 0, 4096);
         // Wait for client to send data
         bytesReceived = recv(clientSocket, buf, 4096, 0);
         if (bytesReceived == -1)
@@ -81,6 +84,6 @@ void Server::Start() {
     close(clientSocket);
 }
 
-void Server::Send(char *msg) {
-    send(clientSocket, msg, strlen(msg) , 0);
+void Server::Send(string *msg) {
+    send(clientSocket, msg, msg->length() , 0);
 }

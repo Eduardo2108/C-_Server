@@ -8,11 +8,10 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include <string.h>
 #include <string>
-
-
 #pragma once
+
+using namespace std;
 
 class Server {
 private:
@@ -32,6 +31,6 @@ private:
 public:
     Server();
     void Start();
-    void Send(char *);
+    void Send(string*);
     static Server* getInstance();
 };
