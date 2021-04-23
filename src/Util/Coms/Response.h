@@ -13,8 +13,18 @@ using namespace std;
 
 class Response {
 private:
+    string log;
     string message;
     int statusCode;
+public:
+    const string &getLog() const {
+        return log;
+    }
+
+    void setLog(const string &log) {
+        Response::log = log;
+    }
+
 public:
     friend ostream &operator<<(ostream &os, const Response &response) {
         os << "message: " << response.message << " statusCode: " << response.statusCode;

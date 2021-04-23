@@ -210,7 +210,6 @@ public:
             auto var = get<int>(obj->getOffset());
             const char *value = std::to_string(var).c_str();
             obj->setValue(value);
-            cout << var << endl;
         } else if (obj->getType() == DOUBLE_KEY_WORD) {
 
             auto var = get<double>(obj->getOffset());
@@ -244,7 +243,6 @@ public:
 
         for (int i = 0; i < this->map->getLen(); ++i) {
             this->uptadeValue(this->map->get(i));
-            cout << "List updated!!" << endl;
         }
     }
 };

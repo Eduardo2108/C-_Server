@@ -38,6 +38,7 @@ static const char *const OPERATION_KEY = "operation";
 
 //For responses
 static const char *const BODY_KEY = "message";
+static const char *const LOG_KEY = "log";
 static const char *const CODE_KEY = "statusCode";
 static const int NOT_FOUND = 404;
 static const int OK = 200;

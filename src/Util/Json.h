@@ -78,7 +78,7 @@ public:
         //GET THE VALUES FROM THE OBJECT
         const char *msg = obj->getMessage().c_str();
         int code = obj->getStatusCode();
-
+        const char* log = obj->getLog().c_str();
         //CREATE WRITER
         StringBuffer s;
         Writer<StringBuffer> writer(s);
@@ -87,6 +87,9 @@ public:
         //FILL THE SPACES IN THE JSON FILE
         writer.Key(BODY_KEY); //string name of the variable
         writer.String(msg);
+
+        writer.Key(LOG_KEY); //string name of the variable
+        writer.String(log);
 
         writer.Key(CODE_KEY);//reference referenceCount
         writer.Int(code);
@@ -196,6 +199,8 @@ public:
         return s.GetString();
 
     }
+
+
 
     static GenericType *readJson(const string &json) {
         GenericType *obj = new GenericType();

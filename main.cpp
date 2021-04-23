@@ -32,16 +32,13 @@ int main() {
 
     Response *r = ServerManager::getInstance()->processRequest(msg);
     Response *r2 = ServerManager::getInstance()->processRequest(msg2);
-    ServerManager::getInstance()->getMemory()->show();
-
     Response *r3 = ServerManager::getInstance()->processRequest(msg3);
 
 
+    cout << Json::generateJson(r) << endl;
+    cout << Json::generateJson(r2) << endl;
+    cout << Json::generateJson(r3) << endl;
 
-    r3->show();
-    ServerManager::getInstance()->getMemory()->show();
-
-    //r3->show();
 
 }
 
