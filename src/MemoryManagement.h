@@ -72,13 +72,22 @@ public:
         return *(dir + i);
     }
 
+/**
+ * Method used for modifying an memory address.
+ * @tparam T type of the new value to store on the memory address.
+ * @param i offset of the memory address.
+ * @param value to store.
+ */
     template<typename T>
-    string modify(int i, T value) {
+    void modify(int i, T value) {
         T *dir = (T *) baseDir;
         *(dir + i) = value;
 
     }
 
+/**
+ * Method for showing in the console the memory map and the memory block with its elements.
+ */
     void show() {
         updateVariables();
         cout << "\n\n-------Memory Map---------\n";
@@ -123,31 +132,33 @@ public:
 
     }
 
+    /**
+     * Method for operating two values stored in the memory map.
+     * @tparam T type of the values (important because it casts the result and must be the same type of value)
+     * @param object_1 name of the first value.
+     * @param object_2 name of the second value.
+     * @param operator_used operator to use.
+     * @return Log message of the result.
+     */
     template<typename T>
-    int operateVariable(string key, T var) {
-        int position = getElement(key)->getOffset();
-        T *temp = (T *) baseDir;
-        *(temp + position) = var;
-        return 1;
-    }
+    string operate(string object_1, string object_2, string operator_used) {
+        //todo: caso cuando el segundo valor es un numero o un elemento :)
+        int offset_obj_1 = getElement(object_1)->getOffset();
+        int offset_obj_2 = getElement(object_2)->getOffset();
 
-    template<typename T>
-    string operate(string key1, string key2, string op) {
-        int index_1 = getElement(key1)->getOffset();
-        int index_2 = getElement(key2)->getOffset();
-
-        T value1 = get<T>(index_1);
-        T value2 = get<T>(index_2);
-
-        if (op == "=") {
-            modify<T>(index_1, value2);
-            return key1 + LOG_VARIABLE_MODIFYIED + to_string(value2);
+        T value1 = get<T>(offset_obj_1);
+        T value2 = get<T>(offset_obj_2);
+        string result_log;
+        if (operator_used == "=") {
+            modify<T>(offset_obj_1, value2);
+            result_log = object_1 + LOG_VARIABLE_MODIFYIED + to_string(value2);
         }
-        if (op == "+") {
+        if (operator_used == "+") {
             T sum = (value2 + value1);
-            modify<T>(index_1, sum);
-            return key1 + LOG_VARIABLE_MODIFYIED + to_string((value2 + value1));
+            modify<T>(offset_obj_1, sum);
+            result_log = object_1 + LOG_VARIABLE_MODIFYIED + to_string((value2 + value1));
         }
+        return result_log;
     }
 
     /**
@@ -159,42 +170,50 @@ public:
         return this->getElement(key)->getAddr();
     }
 
+/**
+ * Method for adding numeric objects to the memory, it is separated from numeric and char, because of the casting of a void* pointer.
+ * It would not compile otherwise.
+ * @tparam T type of the object (int, float, double, long)
+ * @param obj_to_add pointer to the element to add to the server.
+ * @return json format of the element added.
+ */
     template<typename T>
-    string addElementDigits(GenericType *obj) {
-        if (this->getElement(obj->getKey()))
-            return "";
-        auto *conv = new Converter();
-        T element = conv->convertDigits<T>(obj->getValue().c_str());
+    string addElementDigits(GenericType *obj_to_add) {
+        if (this->getElement(obj_to_add->getKey()))return "";
+        T element = Converter::convertDigits<T>(obj_to_add->getValue().c_str());
         int obj_offset = this->addElement<T>(element);
-        //le asigno a el objeto el valor, para poder accesarlo luego.
+        T *casted_dir = (T *) baseDir;
 
-        T *temp = (T *) baseDir;
-        //CAST THE ADDR TO CONST CHAR*
+        //Cast the la dirección de memoria a const char*
         std::ostringstream address;
-
-        address << ((temp + obj_offset));
+        address << ((casted_dir + obj_offset));
         const char *addr = address.str().c_str();
-        obj->setAddr(addr);
-        obj->setOffset(obj_offset);
-        //agrego el objeto en el mapa de memoruia
-        const string &jsonGenerated = Json::generateJson(obj);
 
-        GenericType *finalObj = Json::readJson(jsonGenerated);
-        finalObj->setType(obj->getType());
-        this->map->append(finalObj);
+        obj_to_add->setAddr(addr);
+        obj_to_add->setOffset(obj_offset);
+
+        //agrego el objeto en el mapa de memoruia
+        const string &jsonGenerated = Json::generateJson(obj_to_add);
+        this->map->append(obj_to_add);
 
         return jsonGenerated;
     }
 
-    string addElementChar(GenericType *obj) {
-        int dir = this->addElement<char>(*obj->getValue().c_str());
+    /**
+     * Specific case for adding a Char, same as addElementDigit but the casting is different.
+     * @param obj_to_add pointer to the object to add.
+     * @return Json of the generated object.
+     */
+    string addElementChar(GenericType *obj_to_add) {
+        int dir = this->addElement<char>(*obj_to_add->getValue().c_str());
         //le asigno a el objeto el valor, para poder accesarlo luego.
-        obj->setOffset(dir);
+        obj_to_add->setOffset(dir);
         //agrego el objeto en el mapa de memoruia
-        this->map->append(obj);
-        return Json::generateJson(obj);
+        this->map->append(obj_to_add);
+        return Json::generateJson(obj_to_add);
     }
 
+    //fixme: TEST
     void deleteElement(string key) {
         GenericType *obj = this->getElement(key);
         long *temp = (long *) this->baseDir;
@@ -207,45 +226,53 @@ public:
         this->map->del(obj);
     }
 
-    void uptadeValue(GenericType *obj) {
+    /**
+     * Method for updating the value of an object in an memory map, using the value from the memory array.
+     * It uses the type for getting the element in the right type of cast.
+     * @param obj_to_update pointer to the object to update.
+     */
+    void uptadeVariables_aux(GenericType *obj_to_update) {
 
-        if (obj->getType() == INTEGER_KEY_WORD) {
-            auto var = get<int>(obj->getOffset());
+        if (obj_to_update->getType() == INTEGER_KEY_WORD) {
+            auto var = get<int>(obj_to_update->getOffset());
             const char *value = std::to_string(var).c_str();
-            obj->setValue(value);
-        } else if (obj->getType() == DOUBLE_KEY_WORD) {
+            obj_to_update->setValue(value);
+        } else if (obj_to_update->getType() == DOUBLE_KEY_WORD) {
 
-            auto var = get<double>(obj->getOffset());
-            obj->setValue(std::to_string(var).c_str());
-
-            cout << var << endl;
-        } else if (obj->getType() == FLOAT_KEY_WORD) {
-            auto var = get<float>(obj->getOffset());
-            obj->setValue(std::to_string(var).c_str());
+            auto var = get<double>(obj_to_update->getOffset());
+            obj_to_update->setValue(std::to_string(var).c_str());
 
             cout << var << endl;
-        } else if (obj->getType() == LONG_KEY_WORD) {
-            auto var = get<long>(obj->getOffset());
-            obj->setValue(std::to_string(var).c_str());
+        } else if (obj_to_update->getType() == FLOAT_KEY_WORD) {
+            auto var = get<float>(obj_to_update->getOffset());
+            obj_to_update->setValue(std::to_string(var).c_str());
 
             cout << var << endl;
-        } else if (obj->getType() == CHAR_KEY_WORD) {
-            auto var = get<char>(obj->getOffset());
-            obj->setValue(std::to_string(var).c_str());
+        } else if (obj_to_update->getType() == LONG_KEY_WORD) {
+            auto var = get<long>(obj_to_update->getOffset());
+            obj_to_update->setValue(std::to_string(var).c_str());
 
             cout << var << endl;
-        } else if (obj->getType() == INTEGER_KEY_WORD) {
+        } else if (obj_to_update->getType() == CHAR_KEY_WORD) {
+            auto var = get<char>(obj_to_update->getOffset());
+            obj_to_update->setValue(std::to_string(var).c_str());
+
+            cout << var << endl;
+        } else if (obj_to_update->getType() == INTEGER_KEY_WORD) {
             cout << "Struct not implemented." << endl;
-        } else if (obj->getType() == INTEGER_KEY_WORD) {
+        } else if (obj_to_update->getType() == INTEGER_KEY_WORD) {
             cout << "Struct not implemented." << endl;
 
         }
     }
 
+    /**
+     * Main method for updating variables on the memory, runs "uptadeVariables_aux" for all the elements on the memory map.
+     */
     void updateVariables() {
 
         for (int i = 0; i < this->map->getLen(); ++i) {
-            this->uptadeValue(this->map->get(i));
+            this->uptadeVariables_aux(this->map->get(i));
         }
     }
 };

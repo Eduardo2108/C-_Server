@@ -118,7 +118,12 @@ public:
 public:
 
     void show() {
-        cout << "{ Name: " << this->key << " Value: " << this->value << " Address: " << this->addr << " Offset: " << this->offset << "}\n";
+        cout << "{ Name: " << this->key
+             << " Value: " << this->value
+             << " Address: " << this->addr
+             << " Offset: " << this->offset
+             << " ReferenceCounter: " << this->referenceCount
+             << "}\n";
     }
 };
 

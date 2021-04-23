@@ -10,7 +10,7 @@
 class Converter {
 public:
     template<typename T>
-    T convertDigits(const char *var) {
+    static T convertDigits(const char *var) {
         try {
             if (typeid(T) == typeid(int)) {
                 return std::atoi(var);
