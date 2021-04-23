@@ -73,9 +73,10 @@ public:
     }
 
     template<typename T>
-    T modify(int i, T value) {
+    string modify(int i, T value) {
         T *dir = (T *) baseDir;
         *(dir + i) = value;
+
     }
 
     void show() {
@@ -140,11 +141,12 @@ public:
 
         if (op == "=") {
             modify<T>(index_1, value2);
-            return "Operation = realized";
+            return key1 + LOG_VARIABLE_MODIFYIED + to_string(value2);
         }
         if (op == "+") {
-            modify<T>(index_1, (value2 + value1));
-            return "Operation + realized";
+            T sum = (value2 + value1);
+            modify<T>(index_1, sum);
+            return key1 + LOG_VARIABLE_MODIFYIED + to_string((value2 + value1));
         }
     }
 

@@ -44,9 +44,10 @@ public:
                 string json = msg->getContentJson();
                 int size = msg->getSize();
                 string type = msg->getType();
-                string jsonGenerated = createElement(json, type, size);
+                string jsonGenerated = createElement(json, type, size, result);
                 result->setStatusCode(OK);
                 result->setMessage(jsonGenerated);
+
             } catch (std::bad_alloc e) {
                 result->setStatusCode(INTERNAL_ERROR);
                 result->setMessage(e.what());
@@ -58,7 +59,7 @@ public:
                 string op = msg->getOperation();
                 string res = this->operate(firstVar, second, op);
                 result->setStatusCode(OK);
-                result->setMessage(res);
+                result->setLog(res);
 
             } catch (std::exception e) {
 
@@ -77,44 +78,55 @@ public:
             }
             catch (GenericType *e) {
                 result->setStatusCode(NOT_FOUND);
-                result->setMessage("Variable not found");
+                string log = firstVar;
+                log.append(ERROR_VARIABLE_NOT_FOUND);
+                result->setLog(log);
             }
-
         }
         return result;
     }
 
-    string createElement(const string &json, string type, int size) {
-         string temp;
+    string createElement(const string &json, string type, int size, Response *response) {
+        string temp;
         if (type == INTEGER_KEY_WORD) {
             auto *obj = new Integer();
             obj = static_cast<Integer *>(Json::readJson(json));
             obj->setSize(size);
             obj->setType(type);
+            string log = type.append(" ").append(obj->getKey()).append(LOG_VARIABLE_CREATED);
+            response->setLog(log);
             temp = memory->addElementDigits<int>(obj);
         } else if (type == FLOAT_KEY_WORD) {
             auto *obj = new Float();
             obj = static_cast<Float *>(Json::readJson(json));
             obj->setType(type);
             obj->setSize(size);
+            string log = type.append(" ").append(obj->getKey()).append(LOG_VARIABLE_CREATED);
+            response->setLog(log);
             temp = memory->addElementDigits<float>(obj);
         } else if (type == DOUBLE_KEY_WORD) {
             auto *obj = new Double();
             obj = static_cast<Double *>(Json::readJson(json));
             obj->setType(type);
             obj->setSize(size);
+            string log = type.append(" ").append(obj->getKey()).append(LOG_VARIABLE_CREATED);
+            response->setLog(log);
             temp = memory->addElementDigits<double>(obj);
         } else if (type == CHAR_KEY_WORD) {
             auto *obj = new Char();
             obj = static_cast<Char *>(Json::readJson(json));
             obj->setType(type);
             obj->setSize(size);
+            string log = type.append(" ").append(obj->getKey()).append(LOG_VARIABLE_CREATED);
+            response->setLog(log);
             temp = memory->addElementDigits<double>(obj);
         } else if (type == LONG_KEY_WORD) {
             auto *obj = new Long();
             obj = static_cast<Long *>(Json::readJson(json));
             obj->setType(type);
             obj->setSize(size);
+            string log = type.append(" ").append(obj->getKey()).append(LOG_VARIABLE_CREATED);
+            response->setLog(log);
             temp = memory->addElementDigits<double>(obj);
         } else if (type == STRUCT_KEY_WORD) {
             cout << "Struct not implemented." << endl;
@@ -123,7 +135,7 @@ public:
 
         }
 
-        return temp;
+        return (temp);
     }
 
     MemoryManagement *getMemory() const {

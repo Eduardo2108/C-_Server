@@ -69,10 +69,13 @@ static const auto STRUCT_KEY_WORD = "Struct";
 // **** OPERATORS **** //
 static const auto EQUAL_OPERATOR = "=";
 
-// **** ERROR MESSAGES **** //
-static const char *const ERROR_DATA_TYPE = " : is not a valid identifier. \n";
-static const char *const ERROR_OPERATOR_ASSIGN_VALUE = "\nERROR CON EL OPERADOR A UTILIZAR\n";
-static const char *const ERROR_NAME_OF_VARIABLE = "\nERROR CON EL NOMBRE DE LA VARIABLE\n";
+// **** ERROR MESSAGES AND LOGS **** //
+static const char *const ERROR_DATA_TYPE = " : is not a valid identifier.";
+static const char *const LOG_VARIABLE_CREATED = " was created.";
+static const char *const LOG_VARIABLE_MODIFYIED = " value was set to: ";
+static const char *const ERROR_OPERATOR_ASSIGN_VALUE = ": is not a supported operator.";
+static const char *const ERROR_NAME_OF_VARIABLE = ": is not an allowed variable name.";
+static const char *const ERROR_VARIABLE_NOT_FOUND = ": was not found or it is not visible in this scope";
 
 
 #endif //C__SERVER_CONSTANTS_H
