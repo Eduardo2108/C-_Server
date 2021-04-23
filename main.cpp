@@ -7,9 +7,22 @@
 #include "src/Util/Json.h"
 #include "src/ServerManager.h"
 
-
 using namespace std;
+
+void RunServer(){
+    Server::getInstance()->InitServer();
+    cout << "Server ON" << endl;
+}
+
 int main() {
+    thread RunS (RunServer);
+    RunS.join();
+    return 0;
+}
+
+/*
+int main() {*/
+    /*
     auto *sm = new ServerManager();
 
     string message2 = R"({"action":"CREATE","contentJson":"{\"key\":\"help\",\"value\":\"666.6\"}","type":"Float","size":4})";
@@ -35,7 +48,5 @@ int main() {
     //r3->show();
 
 
+    */
 
-    return 0;
-
-}
