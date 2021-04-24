@@ -97,10 +97,9 @@ public:
                 cout << "Message recieved: " << client_message << endl;
                 const string &response = ServerManager::getInstance()->processRequest(client_message);
                 cout << "Response generated: " << response << endl;
-                send(clientSocket, &response, response.length(), 0);
-
+                Send(response.c_str());
             }
-            send(clientSocket, buf, bytesReceived + 1, 0);
+            //send(clientSocket, buf, bytesReceived + 1, 0);
             // Echo message back to client
         }
 
