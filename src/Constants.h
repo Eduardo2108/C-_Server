@@ -42,6 +42,7 @@ static const char *const LOG_KEY = "log";
 static const char *const CODE_KEY = "statusCode";
 static const int NOT_FOUND = 404;
 static const int OK = 200;
+static const int CREATED = 201;
 static const int NOT_IMPLEMENTED = 501;
 static const int INTERNAL_ERROR = 500;
 

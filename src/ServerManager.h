@@ -165,7 +165,7 @@ public:
             generated_response->setStatusCode(INTERNAL_ERROR);
             generated_response->setLog(key.append(ERROR_NAME_OF_VARIABLE));
         } else {
-            generated_response->setStatusCode(OK);
+            generated_response->setStatusCode(CREATED);
             generated_response->setMessage(generated_json);
         }
     }
