@@ -99,13 +99,9 @@ public:
                 cout << "Response generated: " << response << endl;
                 Send(response.c_str());
             }
-            //send(clientSocket, buf, bytesReceived + 1, 0);
-            // Echo message back to client
         }
-
         // Close the socket
         close(clientSocket);
-
         return 0;
     }
 
