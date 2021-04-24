@@ -9,7 +9,6 @@
 
 using namespace std;
 
-/*
 void RunServer(){
     Server::getInstance()->InitServer();
     cout << "Server ON" << endl;
@@ -20,22 +19,16 @@ int main() {
     RunS.join();
     return 0;
 }
-*/
 
 
+/*
 int main() {
 
-    string msg = R"({"action":"CREATE","contentJson":"{\"key\":\"help\",\"value\":\"1\"}","type":"Integer","size":4})";
-    string msg2 = R"({"action":"CREATE","contentJson":"{\"key\":\"help2\",\"value\":\"666\"}","type":"Integer","size":4})";
-    string msg3 = R"({"action":"MODIFY", "firstVariable": "help", "secondVariable":"var", "operation":"+" })";
-
-
-    cout << ServerManager::getInstance()->processRequest(msg) << endl;
-    cout << ServerManager::getInstance()->processRequest(msg2) << endl;
-
-    ServerManager::getInstance()->getMemory()->show();
-   // cout << ServerManager::getInstance()->processRequest(msg3) << endl;
+    string msg = R"({"message":"{\"key\":\"help\",\"addr\":\"0x5615eeb6b044\",\"value\":\"1\",\"offset\":1,\"referenceCount\":0,\"offset\":1}","log":"Integer help was created.","statusCode":200}})";
+    Response *resp = Json::re(msg);
+    // cout << ServerManager::getInstance()->processRequest(msg3) << endl;
 
 
 }
+*/
 

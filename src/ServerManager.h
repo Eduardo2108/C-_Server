@@ -98,7 +98,9 @@ public:
         } else if (action == HALT) {
             //todo: caso en que se reinicia el memory map y se pone todo en 0.
         }
-        return Json::generateJson(response_generated);
+        const string &resp = Json::generateJson(response_generated);
+
+        return resp;
 
     }
 

@@ -77,32 +77,31 @@ public:
         // While loop: accept and echo message back to client
         char buf[4096];
 
-        while (true)
-        {
+        while (true) {
             memset(buf, 0, 4096);
 
             // Wait for client to send data
             int bytesReceived = recv(clientSocket, buf, 4096, 0);
-            if (bytesReceived == -1)
-            {
+            if (bytesReceived == -1) {
                 cerr << "Error in recv(). Quitting" << endl;
                 break;
             }
 
-            if (bytesReceived == 0)
-            {
+            if (bytesReceived == 0) {
                 cout << "Client disconnected " << endl;
                 break;
             }
 
-
             client_message = string(buf, 0, bytesReceived);
-            cout << client_message <<endl;
-            //todo: send this to the client -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-            cout << ServerManager::getInstance()->processRequest(client_message);
+            if (!client_message.empty()) {
+                cout << "Message recieved: " << client_message << endl;
+                const string &response = ServerManager::getInstance()->processRequest(client_message);
+                cout << "Response generated: " << response << endl;
+                send(clientSocket, &response, response.length(), 0);
 
-            // Echo message back to client
+            }
             send(clientSocket, buf, bytesReceived + 1, 0);
+            // Echo message back to client
         }
 
         // Close the socket
