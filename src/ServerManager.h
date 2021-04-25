@@ -29,11 +29,12 @@ private:
     static ServerManager *instance;
 
     /**Private constructor*/
+    ServerManager(int size);
     ServerManager();
 
 
 public:
-    static ServerManager *getInstance();
+    static ServerManager *getInstance(int size = 0);
 
     /**
      * Method for operating two different variables, it provides an access to the memory map, depending on the data type.

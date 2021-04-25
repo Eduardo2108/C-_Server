@@ -8,13 +8,16 @@
 #include "Server.h"
 
 Server* Server::unique_instance = NULL;
-Server::Server(int port) {}
+Server::Server(int port, int size) {
+    this->port = port;
+    this->size = size;
+}
 
 Server::Server() {}
 
-Server *Server::getInstance(int port = 0) {
+Server *Server::getInstance(int port, int size) {
     if (unique_instance == NULL) {
-        unique_instance = new Server(port);
+        unique_instance = new Server(port, size);
     }
     return unique_instance;
 }

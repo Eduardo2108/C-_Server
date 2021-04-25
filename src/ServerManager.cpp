@@ -3,20 +3,25 @@
 //
 #include "ServerManager.h"
 
-ServerManager* ServerManager::instance = nullptr;
-ServerManager::ServerManager(){
-    memory = new MemoryManagement(1000);
+ServerManager *ServerManager::instance = nullptr;
+
+ServerManager::ServerManager(int size) {
+    memory = new MemoryManagement(size);
 
 }
 
-ServerManager *ServerManager::getInstance() {
+ServerManager::ServerManager() {
+
+}
+
+ServerManager *ServerManager::getInstance(int size) {
     if (instance == nullptr) {
-        instance = new ServerManager();
+        instance = new ServerManager(size);
     }
     return instance;
 }
 
-string ServerManager::operate(const string& variable_1, const string& variable_2, const string& operator_used) {
+string ServerManager::operate(const string &variable_1, const string &variable_2, const string &operator_used) {
     GenericType *variable1_obj = this->memory->getElement(variable_1);
     string type = variable1_obj->getType();
     if (type == INTEGER_KEY_WORD) {
@@ -39,3 +44,5 @@ string ServerManager::operate(const string& variable_1, const string& variable_2
 
     }
 }
+
+

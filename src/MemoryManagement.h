@@ -58,6 +58,7 @@ public:
         this->availableAddresses = new Queue<int>();
         this->map = new LinkedList<GenericType *>();
         this->offset = 1;
+        cout << "New Memory Management created with : " << size << " bytes." << endl;
     }
 
 /**

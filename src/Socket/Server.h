@@ -24,20 +24,21 @@ class Server {
 private:
     Server();
 
-    Server(int port);
+    Server(int port, int size);
 
     static Server *unique_instance;
-public:
-    static Server *getInstance(int port);
-
     int clientSocket;
     string client_message;
     int port;
+    int size;
+public:
+    static Server *getInstance(int port = 0, int size = 0);
+
 
     int InitServer() {
-        cout << "Entré al server" << endl;
+        cout << "Listening on: " << this->port << endl;
         //Inicializar el server manager
-        ServerManager::getInstance();
+        ServerManager::getInstance(size);
         // Create a socket
         int listening = socket(AF_INET, SOCK_STREAM, 0);
         if (listening == -1) {
