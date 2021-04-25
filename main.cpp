@@ -1,38 +1,16 @@
 #pragma once
-
 #include <iostream>
 #include "src/Socket/Server.h"
-#include "src/Util/Coms/Message.h"
 #include <thread>
-#include "src/Util/Json.h"
-#include "src/ServerManager.h"
 
 using namespace std;
 
-void RunServer(){
-    Server::getInstance()->InitServer();
-    cout << "Server ON" << endl;
+void RunServer(int port) {
+    Server::getInstance(port)->InitServer();
 }
 
 int main() {
-    thread RunS (RunServer);
-    RunS.join();
+    RunServer(54000);
+    
     return 0;
-
-
-    /*
-     * string msg = R"({"message":"{\"key\":\"help\",\"addr\":\"0x5615eeb6b044\",\"value\":\"1\",\"offset\":1,\"referenceCount\":0,\"offset\":1}","log":"Integer help was created.","statusCode":200}})";
-    cout << ServerManager::getInstance()->processRequest(msg) << endl;
-    */
 }
-
-
-/*
-int main() {
-
-
-
-
-}
-*/
-

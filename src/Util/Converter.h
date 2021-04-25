@@ -25,6 +25,7 @@ public:
         catch (std::exception e) {
             throw e;
         }
+        return 0;
     }
 
 

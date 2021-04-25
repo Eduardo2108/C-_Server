@@ -20,20 +20,27 @@
 
 using namespace std;
 
-class Server{
+class Server {
 private:
     Server();
-    static Server* unique_instance;
+
+    Server(int port);
+
+    static Server *unique_instance;
 public:
-    static Server *getInstance();
+    static Server *getInstance(int port);
+
     int clientSocket;
     string client_message;
-    int InitServer(){
+    int port;
+
+    int InitServer() {
         cout << "Entré al server" << endl;
+        //Inicializar el server manager
+        ServerManager::getInstance();
         // Create a socket
         int listening = socket(AF_INET, SOCK_STREAM, 0);
-        if (listening == -1)
-        {
+        if (listening == -1) {
             cerr << "Can't create a socket! Quitting" << endl;
             return -1;
         }
@@ -41,7 +48,7 @@ public:
         // Bind the ip address and port to a socket
         sockaddr_in hint;
         hint.sin_family = AF_INET;
-        hint.sin_port = htons(54000);
+        hint.sin_port = htons(this->port);
         inet_pton(AF_INET, "0.0.0.0", &hint.sin_addr);
 
         bind(listening, (sockaddr*)&hint, sizeof(hint));
@@ -89,7 +96,7 @@ public:
 
             if (bytesReceived == 0) {
                 cout << "Client disconnected " << endl;
-                break;
+                continue;
             }
 
             client_message = string(buf, 0, bytesReceived);
