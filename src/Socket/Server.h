@@ -17,7 +17,7 @@
 #include <string>
 #include <thread>
 #include "../ServerManager.h"
-
+#include "../../librerias/spdlog/spdlog.h"
 using namespace std;
 
 class Server {
@@ -36,13 +36,13 @@ public:
 
 
     int InitServer() {
-        cout << "Listening on: " << this->port << endl;
+        spdlog::info("Listening on port: " + to_string(this->port));
         //Inicializar el server manager
         ServerManager::getInstance(size);
         // Create a socket
         int listening = socket(AF_INET, SOCK_STREAM, 0);
         if (listening == -1) {
-            cerr << "Can't create a socket! Quitting" << endl;
+            spdlog::critical("Can't create a socket! Quitting");
             return -1;
         }
 
@@ -61,7 +61,7 @@ public:
         sockaddr_in client;
         socklen_t clientSize = sizeof(client);
 
-        clientSocket = accept(listening, (sockaddr*)&client, &clientSize);
+        clientSocket = accept(listening, (sockaddr *) &client, &clientSize);
 
         char host[NI_MAXHOST];      // Client's remote name
         char service[NI_MAXSERV];   // Service (i.e. port) the client is connect on
@@ -69,12 +69,11 @@ public:
         memset(host, 0, NI_MAXHOST); // same as memset(host, 0, NI_MAXHOST);
         memset(service, 0, NI_MAXSERV);
 
-        if (getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0)
-        {
-            cout << host << " connected on port " << service << endl;
-        }
-        else
-        {
+        if (getnameinfo((sockaddr *) &client, sizeof(client), host, NI_MAXHOST, service, NI_MAXSERV, 0) == 0) {
+            std::ostringstream log;
+            log << service;
+            spdlog::info("Client connected in port: " + log.str());
+        } else {
             inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
             cout << host << " connected on port " << ntohs(client.sin_port) << endl;
         }
@@ -91,20 +90,20 @@ public:
             // Wait for client to send data
             int bytesReceived = recv(clientSocket, buf, 4096, 0);
             if (bytesReceived == -1) {
-                cerr << "Error in recv(). Quitting" << endl;
+                spdlog::critical("Error in recv(). Quitting");
                 break;
             }
 
             if (bytesReceived == 0) {
+                spdlog::info("Client disconnected, exiting program...");
                 cout << "Client disconnected " << endl;
-                continue;
+                break;
             }
 
             client_message = string(buf, 0, bytesReceived);
             if (!client_message.empty()) {
-                cout << "Message recieved: " << client_message << endl;
-                const string &response = ServerManager::getInstance()->processRequest(client_message);
-                cout << "Response generated: " << response << endl;
+                spdlog::info("Message recieved: " + client_message);
+                 const string &response = ServerManager::getInstance()->processRequest(client_message);
                 Send(response.c_str());
             }
         }

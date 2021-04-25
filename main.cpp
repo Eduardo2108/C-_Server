@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "src/Socket/Server.h"
+#include "librerias/spdlog/spdlog.h"
 
 using namespace std;
 
@@ -9,26 +10,30 @@ void RunServer(int port, int size) {
 }
 
 int main() {
+
     int port;
     int size;
-    cout << "Welcome to C! Server" << endl;
-    cout << "Specify a port for the server to run:" << endl;
+    spdlog::info("***********************************************");
+    spdlog::info("*            Welcome to C! Server             *");
+    spdlog::info("***********************************************");
+
+    spdlog::info("Specify a port for the server to run:");
     cin >> port;
-    cout << "Port selected successfully: " << port << endl;
-    cout << "Specify the size (in bytes) the server will reserve for variables:" << endl;
-    cin >> size;
-    cout << "Memory size  selected successfully: " << size << " bytes." << endl;
-
     if (port <= 0) {
-        cout << port << " is not a valid port." << endl;
+        spdlog::critical(to_string(port) + " is not a valid port.");
         return -1;
     }
-    if (size <= 0) {
-        cout << port << "bytes is not a valid space." << endl;
-        return -1;
-    } else {
-        RunServer(52000, size);
+    spdlog::info("Specify the size (in bytes) the server will reserve for variables:");
+    cin >> size;
 
+    if (size <= 0) {
+        spdlog::critical(to_string(size) + " is not a valid memory size.");
+        return -1;
     }
+
+    spdlog::info("Starting the server...");
+
+    RunServer(port, size);
+
 
 }

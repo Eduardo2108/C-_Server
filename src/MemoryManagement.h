@@ -8,6 +8,7 @@
 #include "DataStructures/Queue.h"
 #include "Types/GenericType.h"
 #include "Util/Converter.h"
+#include "../librerias/spdlog/spdlog.h"
 
 class MemoryManagement {
 
@@ -58,7 +59,6 @@ public:
         this->availableAddresses = new Queue<int>();
         this->map = new LinkedList<GenericType *>();
         this->offset = 1;
-        cout << "New Memory Management created with : " << size << " bytes." << endl;
     }
 
 /**
@@ -196,7 +196,7 @@ public:
         //agrego el objeto en el mapa de memoruia
         const string &jsonGenerated = Json::generateJson(obj_to_add);
         this->map->append(obj_to_add);
-
+        spdlog::info("Variable created: " + jsonGenerated);
         return jsonGenerated;
     }
 
@@ -238,26 +238,17 @@ public:
             const char *value = std::to_string(var).c_str();
             obj_to_update->setValue(value);
         } else if (obj_to_update->getType() == DOUBLE_KEY_WORD) {
-
             auto var = get<double>(obj_to_update->getOffset());
             obj_to_update->setValue(std::to_string(var).c_str());
-
-            cout << var << endl;
         } else if (obj_to_update->getType() == FLOAT_KEY_WORD) {
             auto var = get<float>(obj_to_update->getOffset());
             obj_to_update->setValue(std::to_string(var).c_str());
-
-            cout << var << endl;
         } else if (obj_to_update->getType() == LONG_KEY_WORD) {
             auto var = get<long>(obj_to_update->getOffset());
             obj_to_update->setValue(std::to_string(var).c_str());
-
-            cout << var << endl;
         } else if (obj_to_update->getType() == CHAR_KEY_WORD) {
             auto var = get<char>(obj_to_update->getOffset());
             obj_to_update->setValue(std::to_string(var).c_str());
-
-            cout << var << endl;
         } else if (obj_to_update->getType() == INTEGER_KEY_WORD) {
             cout << "Struct not implemented." << endl;
         } else if (obj_to_update->getType() == INTEGER_KEY_WORD) {

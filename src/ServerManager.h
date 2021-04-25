@@ -18,6 +18,7 @@
 #include "Types/Reference.h"
 #include "Util/Json.h"
 #include "MemoryManagement.h"
+#include "../librerias/spdlog/spdlog.h"
 
 class ServerManager {
 
@@ -63,6 +64,7 @@ public:
                 string type = request->getType();
                 createElement(json, type, size, response_generated);
             } catch (std::bad_alloc e) {
+                spdlog::error("Error creating variable.");
                 response_generated->setStatusCode(INTERNAL_ERROR);
                 response_generated->setMessage(e.what());
             }
