@@ -18,21 +18,5 @@ int main() {
     thread RunS (RunServer);
     RunS.join();
     return 0;
-
-
-    /*
-     * string msg = R"({"message":"{\"key\":\"help\",\"addr\":\"0x5615eeb6b044\",\"value\":\"1\",\"offset\":1,\"referenceCount\":0,\"offset\":1}","log":"Integer help was created.","statusCode":200}})";
-    cout << ServerManager::getInstance()->processRequest(msg) << endl;
-    */
 }
-
-
-/*
-int main() {
-
-
-
-
-}
-*/
 
