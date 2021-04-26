@@ -54,6 +54,7 @@ public:
      */
     string processRequest(string request_json) {
         Message *request = Json::readJsonMessage(request_json);
+        request->show();
         auto *response_generated = new Response();
         string action = request->getAction();
         if (action == CREATE) {

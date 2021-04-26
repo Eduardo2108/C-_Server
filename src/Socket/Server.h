@@ -114,6 +114,8 @@ public:
 
     void Send(const char *msg) {
         int sendRes = send(clientSocket, msg, strlen(msg), 0);
+        spdlog::info("Message sent: " + string(msg));
+
         if (sendRes == -1) {
             std::cout << "Send message failed" << std::endl;
         }

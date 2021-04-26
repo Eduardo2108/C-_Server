@@ -9,5 +9,6 @@
     <mapping directory="$PROJECT_DIR$/cpp-netlib/deps/googletest" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cpp-netlib/deps/uri" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/cpp-netlib/libs/network/doc/_ext/breathe" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/librerias/spdlog" vcs="Git" />
   </component>
 </project>

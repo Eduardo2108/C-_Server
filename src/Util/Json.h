@@ -267,7 +267,6 @@ public:
         if (doc.HasMember(TYPE_KEY)) {
             msg->setType(doc[TYPE_KEY].GetString());
         }
-
         if (doc.HasMember(FIRST_VAR_KEY)) {
             msg->setFirstVariable(doc[FIRST_VAR_KEY].GetString());
         }

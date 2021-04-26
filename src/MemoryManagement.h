@@ -45,7 +45,8 @@ private:
             T *temp = (T *) baseDir;
             *(temp + position) = element;
             address = position;
-            cout << "El elemento: " << element << " fué guardado en la posición (reutilizada): " << position << endl;
+            spdlog::info("El elemento: " + to_string(element) + " fué guardado en la posición (reutilizada): " +
+                         to_string(position));
             availableAddresses->deQueue();
         }
         return address;
@@ -143,9 +144,11 @@ public:
      */
     template<typename T>
     string operate(string object_1, string object_2, string operator_used) {
+        cerr << "Operator: " << operator_used << endl;
         //todo: caso cuando el segundo valor es un numero o un elemento :)
+        GenericType *secondElement = getElement(object_2);
         int offset_obj_1 = getElement(object_1)->getOffset();
-        int offset_obj_2 = getElement(object_2)->getOffset();
+        int offset_obj_2 = secondElement->getOffset();
 
         T value1 = get<T>(offset_obj_1);
         T value2 = get<T>(offset_obj_2);
