@@ -143,7 +143,7 @@ public:
      * @return Log message of the result.
      */
     template<typename T>
-    string operate(string object_1, string object_2, string operator_used) {
+    string +operate(string object_1, string object_2, string operator_used) {
         cerr << "Operator: " << operator_used << endl;
         //todo: caso cuando el segundo valor es un numero o un elemento :)
         GenericType *secondElement = getElement(object_2);
