@@ -10,7 +10,9 @@
 #include "iostream"
 
 using namespace std;
-
+/**
+ * Class for sending responses to the client.
+ */
 class Response {
 private:
     string log;

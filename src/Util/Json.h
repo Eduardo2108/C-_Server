@@ -24,9 +24,13 @@ using namespace std;
 
 
 class Json {
-    //TODO: hacer singleton
-public:
 
+public:
+    /**
+     * Converts a GenericType in Json file.
+     * @param obj GenericObject instance.
+     * @return string format of the json object.
+     */
     static string generateJson(GenericType *obj) {
         //GET THE VALUES FROM THE OBJECT
         const char *name = obj->getKey().c_str();
@@ -74,11 +78,16 @@ public:
 
     }
 
+    /**
+     * Converts a Response in Json file.
+     * @param obj Response instance.
+     * @return string format of the json object.
+     */
     static string generateJson(Response *obj) {
         //GET THE VALUES FROM THE OBJECT
         const char *msg = obj->getMessage().c_str();
         int code = obj->getStatusCode();
-        const char* log = obj->getLog().c_str();
+        const char *log = obj->getLog().c_str();
         //CREATE WRITER
         StringBuffer s;
         Writer<StringBuffer> writer(s);
@@ -100,6 +109,11 @@ public:
 
     }
 
+    /**
+     * Converts a Reference in Json file.
+     * @param obj Reference instance.
+     * @return string format of the json object.
+     */
     static string generateJson(Reference *obj) {
         const char *pointer = obj->getPointer();
         const char *address = obj->getAddr();
@@ -109,7 +123,7 @@ public:
 
         //CREATE WRITER
         StringBuffer s;
-        Writer <StringBuffer> writer(s);
+        Writer<StringBuffer> writer(s);
         writer.StartObject();
 
         //IF THE REFERENCE HAS A POINTER TO A VALUE
@@ -147,6 +161,11 @@ public:
 
     }
 
+    /**
+     * Converts a Message in Json file.
+     * @param obj Message instance.
+     * @return string format of the json object.
+     */
     static string generateJson(Message *msg) {
         //CREATE WRITER
         StringBuffer s;
@@ -201,7 +220,11 @@ public:
     }
 
 
-
+    /**
+     * Reads a json object and convert it in a GenericType
+     * @param json string of the object.
+     * @return instance of the GenericType
+     */
     static GenericType *readJson(const string &json) {
         GenericType *obj = new GenericType();
         rapidjson::Document doc;
@@ -234,6 +257,11 @@ public:
         return obj;
     }
 
+    /**
+     * Reads a json object and convert it in a Reference
+     * @param json string of the object.
+     * @return instance of the Reference
+     */
     static Reference readJson(const string &json, Reference *obj) {
         rapidjson::Document doc;
         doc.Parse<kParseDefaultFlags>(json.c_str());
@@ -250,6 +278,11 @@ public:
         return *obj;
     }
 
+    /**
+     * Reads a json object and convert it in a Message
+     * @param json string of the object.
+     * @return instance of the Message
+     */
     static Message *readJsonMessage(const string &json) {
         Message *msg = new Message();
         rapidjson::Document doc;

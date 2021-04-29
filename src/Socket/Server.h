@@ -34,7 +34,10 @@ private:
 public:
     static Server *getInstance(int port = 0, int size = 0);
 
-
+    /**
+     * Method for initializing the server on the port specified
+     * @return exit code from copiler.
+     */
     int InitServer() {
         spdlog::info("Listening on port: " + to_string(this->port));
         //Inicializar el server manager
@@ -111,7 +114,10 @@ public:
         close(clientSocket);
         return 0;
     }
-
+    /**
+     * Method for sending a message to the client.
+     * @param msg string of the message to be sent.
+     */
     void Send(const char *msg) {
         int sendRes = send(clientSocket, msg, strlen(msg), 0);
         spdlog::info("Message sent: " + string(msg));
@@ -120,12 +126,6 @@ public:
             std::cout << "Send message failed" << std::endl;
         }
     }
-
-
-    string ReadString(){
-        return client_message;
-    }
-
 };
 
 #endif //C__SERVER_SERVER_H

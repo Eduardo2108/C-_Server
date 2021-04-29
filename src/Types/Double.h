@@ -8,10 +8,7 @@
 class Double : public GenericType {
 public:
     Double() {
-
     }
-
-
 };
 
 #endif //C__SERVER_DOUBLE_H

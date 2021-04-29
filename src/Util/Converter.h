@@ -9,6 +9,12 @@
 
 class Converter {
 public:
+/**
+ * Converts a string into a instance of object (int, float, double, long, char)
+ * @tparam T primitive data type.
+ * @param var variable to convert.
+ * @return converted value of the variable.
+ */
     template<typename T>
     static T convertDigits(const char *var) {
         try {

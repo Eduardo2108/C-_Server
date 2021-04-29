@@ -8,7 +8,6 @@ using namespace std;
 void RunServer(int port, int size) {
     Server::getInstance(port, size)->InitServer();
 }
-
 int main() {
 
     int port;
