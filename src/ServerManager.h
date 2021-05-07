@@ -115,6 +115,8 @@ public:
 
         } else if (action == COLLECTOR) {
             this->memory->__cleanMemory();
+            response_generated->setStatusCode(OK);
+            response_generated->setLog("Garbage collector running...");
         }
         const string &resp = Json::generateJson(response_generated);
 
