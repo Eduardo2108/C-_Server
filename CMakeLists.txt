@@ -10,4 +10,4 @@ if (SPDLOG_BUILD_EXAMPLE_HO)
 endif ()
 
 
-add_executable(${PROJECT_NAME} main.cpp src/Util/Coms/Response.h src/ServerManager.h src/Socket/Server.cpp src/Socket/Server.h src/ServerManager.cpp)
+add_executable(${PROJECT_NAME} main.cpp src/Util/Coms/Response.h src/ServerManager.h src/Socket/Server.cpp src/Socket/Server.h src/ServerManager.cpp src/Memory/Collector.h)

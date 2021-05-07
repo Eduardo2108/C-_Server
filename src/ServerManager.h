@@ -17,7 +17,7 @@
 #include "Types/Char.h"
 #include "Types/Reference.h"
 #include "Util/Json.h"
-#include "MemoryManagement.h"
+#include "Memory/MemoryManagement.h"
 #include "../librerias/spdlog/spdlog.h"
 
 class ServerManager {

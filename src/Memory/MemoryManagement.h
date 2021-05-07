@@ -5,10 +5,10 @@
 #ifndef C__SERVER_MEMORYMANAGEMENT_H
 #define C__SERVER_MEMORYMANAGEMENT_H
 
-#include "DataStructures/Queue.h"
-#include "Types/GenericType.h"
-#include "Util/Converter.h"
-#include "../librerias/spdlog/spdlog.h"
+#include "../DataStructures/Queue.h"
+#include "../Types/GenericType.h"
+#include "../Util/Converter.h"
+#include "../../librerias/spdlog/spdlog.h"
 
 class MemoryManagement {
 
@@ -143,7 +143,7 @@ public:
      * @return Log message of the result.
      */
     template<typename T>
-    string +operate(string object_1, string object_2, string operator_used) {
+    string operate(string object_1, string object_2, string operator_used) {
         cerr << "Operator: " << operator_used << endl;
         //todo: caso cuando el segundo valor es un numero o un elemento :)
         GenericType *secondElement = getElement(object_2);
