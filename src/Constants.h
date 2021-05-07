@@ -54,6 +54,7 @@ static const auto MODIFY = "MODIFY";
 static const auto CREATE = "CREATE";
 static const auto SEARCH = "SEARCH";
 static const auto HALT = "HALT";
+static const auto COLLECTOR = "COLLECTOR";
 
 //|---------------------------| //
 //|   * COMPILER SETTINGS  *  | //

@@ -91,6 +91,10 @@ public:
  * Method for showing in the console the memory map and the memory block with its elements.
  */
     void show() {
+        if (this->map->getLen() == 0) {
+            cout << "**** MAP EMPTY ****" << endl;
+            return;
+        }
         updateVariables();
         cout << "\n\n-------Memory Map---------\n";
         int i = 0;
@@ -201,7 +205,7 @@ public:
 
         obj_to_add->setAddr(addr);
         obj_to_add->setOffset(obj_offset);
-
+        obj_to_add->setReferenceCount(1);
         //agrego el objeto en el mapa de memoruia
         const string &jsonGenerated = Json::generateJson(obj_to_add);
         this->map->append(obj_to_add);
@@ -218,13 +222,15 @@ public:
         int dir = this->addElement<char>(*obj_to_add->getValue().c_str());
         //le asigno a el objeto el valor, para poder accesarlo luego.
         obj_to_add->setOffset(dir);
-        //agrego el objeto en el mapa de memoruia
+        obj_to_add->setReferenceCount(1);
+        //agrego el objeto en el mapa de memoria
         this->map->append(obj_to_add);
         return Json::generateJson(obj_to_add);
     }
-     //fixme: TEST AND IMPLEMENT.
-    void deleteElement(string key) {
-        GenericType *obj = this->getElement(key);
+
+    //fixme: TEST AND IMPLEMENT.
+    void deleteElement(int key) {
+        GenericType *obj = this->map->get(key);
         long *temp = (long *) this->baseDir;
 
         long *ptr = temp + obj->getOffset();
@@ -233,6 +239,7 @@ public:
         this->map->del(obj);
         this->availableAddresses->queue(obj->getOffset());
         this->map->del(obj);
+        spdlog::info("Deleted: " + obj->getKey());
     }
 
     /**
@@ -280,6 +287,24 @@ public:
         GenericType *obj = this->getElement(basicString);
         obj->setReferenceCount(obj->getReferenceCount() + 1);
 
+    }
+
+    void __cleanMemory() {
+        for (int i = 0; i < this->map->getLen(); i++) {
+            GenericType *obj = this->map->get(i);
+            if (obj->getOffset() == 0) {
+                spdlog::info("Deleting the object: " + obj->getKey());
+                this->deleteElement(i);
+            }
+        }
+    }
+
+    void __halt() {
+        cout << "deleting all variables..." << endl;
+        for (int i = 0; i < this->map->getLen(); i++) {
+            deleteElement(i);
+        }
+        this->show();
     }
 };
 
