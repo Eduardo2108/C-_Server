@@ -108,7 +108,13 @@ public:
                 response_generated->setLog(log);
             }
         } else if (action == HALT) {
-            //todo: caso en que se reinicia el memory map y se pone todo en 0.
+
+            this->memory->__halt();
+            response_generated->setStatusCode(OK);
+            response_generated->setLog("Application has stopped, all variables deleted.");
+
+        } else if (action == COLLECTOR) {
+            this->memory->__cleanMemory();
         }
         const string &resp = Json::generateJson(response_generated);
 
