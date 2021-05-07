@@ -9,7 +9,6 @@ void RunServer(int port, int size) {
     Server::getInstance(port, size)->InitServer();
 }
 int main() {
-
     int port;
     int size;
     spdlog::info("***********************************************");
@@ -33,6 +32,15 @@ int main() {
     spdlog::info("Starting the server...");
 
     RunServer(port, size);
+/*    string msg_1 = R"({"action":"CREATE","contentJson":"{\"key\":\"x\",\"value\":\"3\"}","type":"Integer","size":4})";
+    string msg_2 = R"({"action":"CREATE","contentJson":"{\"key\":\"y\",\"value\":\"7\"}","type":"Integer","size":4})";
+    string msg_3 = R"({"action":"MODIFY","firstVariable":"x","secondVariable":"y","operation":"="})";
+
+    ServerManager::getInstance(15000)->processRequest(msg_1);
+    ServerManager::getInstance(15000)->processRequest(msg_2);
+
+    ServerManager::getInstance(15000)->processRequest(msg_3);
+    ServerManager::getInstance()->getMemory()->show();*/
 
 
 }

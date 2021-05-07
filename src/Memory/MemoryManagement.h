@@ -101,6 +101,7 @@ public:
                  << " | Offset: " << obj->getOffset()
                  << " | Value: " << VAL
                  << " | Type: " << obj->getType()
+                 << " | Counter: " << obj->getCounter()
                  << "\n-------------------" << endl;
             i++;
         }
@@ -143,26 +144,31 @@ public:
      * @return Log message of the result.
      */
     template<typename T>
-    string operate(string object_1, string object_2, string operator_used) {
+    string operate(string object_1, string object_2, string operator_used, Response *resp) {
         cerr << "Operator: " << operator_used << endl;
         //todo: caso cuando el segundo valor es un numero o un elemento :)
-        GenericType *secondElement = getElement(object_2);
-        int offset_obj_1 = getElement(object_1)->getOffset();
-        int offset_obj_2 = secondElement->getOffset();
+        GenericType *obj_1 = getElement(object_1);
+        GenericType *obj_2 = getElement(object_2);
+        int offset_obj_1 = obj_1->getOffset();
+        int offset_obj_2 = obj_2->getOffset();
 
         T value1 = get<T>(offset_obj_1);
         T value2 = get<T>(offset_obj_2);
         string result_log;
+
         if (operator_used == "=") {
             modify<T>(offset_obj_1, value2);
             result_log = object_1 + LOG_VARIABLE_MODIFYIED + to_string(value2);
+            obj_1->setValue(to_string(value2));
         }
         if (operator_used == "+") {
             T sum = (value2 + value1);
             modify<T>(offset_obj_1, sum);
             result_log = object_1 + LOG_VARIABLE_MODIFYIED + to_string((value2 + value1));
+            obj_1->setValue(to_string((value2 + value1)));
+
         }
-        return result_log;
+        resp->setLog(result_log);
     }
 
     /**
@@ -199,7 +205,7 @@ public:
         //agrego el objeto en el mapa de memoruia
         const string &jsonGenerated = Json::generateJson(obj_to_add);
         this->map->append(obj_to_add);
-        spdlog::info("Variable created: " + jsonGenerated);
+        //spdlog::info("Variable created: " + jsonGenerated);
         return jsonGenerated;
     }
 
@@ -238,7 +244,7 @@ public:
 
         if (obj_to_update->getType() == INTEGER_KEY_WORD) {
             auto var = get<int>(obj_to_update->getOffset());
-            const char *value = std::to_string(var).c_str();
+            string value = std::to_string(var);
             obj_to_update->setValue(value);
         } else if (obj_to_update->getType() == DOUBLE_KEY_WORD) {
             auto var = get<double>(obj_to_update->getOffset());
@@ -264,9 +270,16 @@ public:
      * Main method for updating variables on the memory, runs "uptadeVariables_aux" for all the elements on the memory map.
      */
     void updateVariables() {
-        for (int i = 0; i < this->map->getLen(); ++i) {
-            this->uptadeVariables_aux(this->map->get(i));
+        for (int i = 0; i < this->map->getLen(); i++) {
+            GenericType *update = this->map->get(i);
+            this->uptadeVariables_aux(update);
         }
+    }
+
+    void addReferenceCount(string basicString) {
+        GenericType *obj = this->getElement(basicString);
+        obj->setReferenceCount(obj->getReferenceCount() + 1);
+
     }
 };
 

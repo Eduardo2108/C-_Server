@@ -44,7 +44,7 @@ public:
      * @param operator_used operation between the two elements. (=, +)
      * @return log message of the result.
      */
-    string operate(const string& variable_1, const string& variable_2, const string& operator_used);
+    void operate(const string &variable_1, const string &variable_2, const string &operator_used, Response *resp);
 
     /**
      * Method for processing an request from the client, converts the object from json to Message.h
@@ -54,7 +54,6 @@ public:
      */
     string processRequest(string request_json) {
         Message *request = Json::readJsonMessage(request_json);
-        request->show();
         auto *response_generated = new Response();
         string action = request->getAction();
         if (action == CREATE) {
@@ -64,6 +63,7 @@ public:
                 int size = request->getSize();
                 string type = request->getType();
                 createElement(json, type, size, response_generated);
+                this->memory->show();
             } catch (std::bad_alloc e) {
                 spdlog::error("Error creating variable.");
                 response_generated->setStatusCode(INTERNAL_ERROR);
@@ -74,12 +74,20 @@ public:
                 string firstVar = request->getFirstVariable();
                 string second = request->getSecondVariable();
                 string op = request->getOperation();
-                string res = this->operate(firstVar, second, op);
+                this->operate(firstVar, second, op, response_generated);
+                memory->addReferenceCount(firstVar);
+                memory->updateVariables();
+                GenericType *obj = memory->getElement(firstVar);
+                if (!obj) {
+                    throw obj;
+                }
+                string json = Json::generateJson(obj);
+                response_generated->setMessage(json);
                 response_generated->setStatusCode(OK);
-                response_generated->setLog(res);
 
-            } catch (std::exception e) {
-
+            } catch (GenericType e) {
+                response_generated->setStatusCode(INTERNAL_ERROR);
+                response_generated->setLog("Error modifying the variable.");
             }
         } else if (action == SEARCH) {
             string firstVar = request->getFirstVariable();
