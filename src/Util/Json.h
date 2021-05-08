@@ -278,6 +278,30 @@ public:
         return *obj;
     }
 
+    static string __readJson_value_reference(string json) {
+        rapidjson::Document doc;
+        doc.Parse<kParseDefaultFlags>(json.c_str());
+
+        if (doc.HasMember(VALUE_KEY)) {
+            const char *value = doc[VALUE_KEY].GetString();
+            cerr << "Valor leido: " << value << endl;
+            return value;
+
+        }
+    }
+
+    static string __readJson_name_reference(string json) {
+        rapidjson::Document doc;
+        doc.Parse<kParseDefaultFlags>(json.c_str());
+
+        if (doc.HasMember(KEY_VALUE)) {
+            const char *name = doc[KEY_VALUE].GetString();
+            cerr << "Nombre leido: " << name << endl;
+            return name;
+
+        }
+    }
+
     /**
      * Reads a json object and convert it in a Message
      * @param json string of the object.

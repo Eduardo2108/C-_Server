@@ -62,8 +62,8 @@ public:
                 string json = request->getContentJson();
                 int size = request->getSize();
                 string type = request->getType();
+
                 createElement(json, type, size, response_generated);
-                this->memory->show();
             } catch (std::bad_alloc e) {
                 spdlog::error("Error creating variable.");
                 response_generated->setStatusCode(INTERNAL_ERROR);
@@ -124,14 +124,55 @@ public:
 
     }
 
-    /**
-     * Helper method for creating an variable. Provides access to the memory map, depending on the type.
-     * It is separated from processRequest for simplicity.
-     * @param obj_json variable to be created.
-     * @param type type of the variable.
-     * @param size size of the variable.
-     * @param generated_response pointer to the generated_response, used for adding the information needed.
-     */
+    string isReference(string basicString) {
+        string reference;
+        string type;
+        for (int i = 0; i < basicString.length(); i++) {
+            if (basicString[i] == '<') {
+                if (!(reference == REFERENCE_KEY_WORD)) {
+                    return "";
+                } else {
+
+                    for (int j = i + 1; j < basicString.length(); ++j) {
+                        if (basicString[j] != '>') {
+                            type.push_back(basicString[j]);
+                        }
+                    }
+                    return type;
+
+                }
+            }
+            reference.push_back(basicString[i]);
+        }
+    }
+
+    GenericType *isGetAddr(string basicString) {
+        string var;
+        string method;
+        for (int i = 0; i < basicString.length(); i++) {
+            if (basicString[i] == '.') {
+                for (int j = i; j < basicString.length(); ++j) {
+                    method.push_back(basicString[j]);
+                }
+                break;
+            }
+
+            var.push_back(basicString[i]);
+        }
+        if (method == ".getAddr()")
+            cerr << "Buscando la variable: " << var << endl;
+        return this->memory->getElement(var);
+    }
+
+
+/**
+ * Helper method for creating an variable. Provides access to the memory map, depending on the type.
+ * It is separated from processRequest for simplicity.
+ * @param obj_json variable to be created.
+ * @param type type of the variable.
+ * @param size size of the variable.
+ * @param generated_response pointer to the generated_response, used for adding the information needed.
+ */
     void createElement(const string &obj_json, string type, int size, Response *generated_response) {
         /**json generated from the algorithm, used to add more information, such as offset and address.*/
         string generated_json;
@@ -175,8 +216,28 @@ public:
             key = newObject->getKey();
         } else if (type == STRUCT_KEY_WORD) {
             cout << "Struct not implemented." << endl;
-        } else if (type == REFERENCE_KEY_WORD) {
-            cout << "Struct not implemented." << endl;
+
+
+        } else {
+            const string &reference_type = isReference(type);
+            cerr << "Tipo de la referencia: " << reference_type << endl;
+            if (!reference_type.empty()) {
+                cout << "Reference de tipo: " << reference_type << endl;
+                const string &name = Json::__readJson_name_reference(obj_json);
+                const string &type = Json::__readJson_value_reference(obj_json);
+
+                auto *newObject = new Reference();
+
+                GenericType *pointed = isGetAddr(type);
+                pointed->show();
+                newObject->setType(reference_type);
+                newObject->setPointer(pointed->getAddr());
+                newObject->setKey(name);
+
+                newObject->show();
+                generated_json = Json::generateJson(newObject);
+
+            }
         }
         string log = type.append(" ").append(key).append(LOG_VARIABLE_CREATED);
         generated_response->setLog(log);

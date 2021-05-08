@@ -15,11 +15,19 @@ private:
     const char *pointer;
     /** Identifier for the reference type. */
     string key;
+    string type;
 
 public:
+    const string &getType() const {
+        return type;
+    }
+
+    void setType(const string &type) {
+        Reference::type = type;
+    }
 
     Reference() {
-        ;
+
     }
 
     void setAddr(const char *addr) {
